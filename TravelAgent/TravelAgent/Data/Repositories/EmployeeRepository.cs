@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,41 +9,77 @@ namespace TravelAgent.Data.Repositories
 {
     public class EmployeeRepository : IRepository<Employee>
     {
-        private readonly AppDbContext appDbContext;
+        private readonly Func<AppDbContext> appDbContextFunc;
 
-        public EmployeeRepository(AppDbContext context)
+        public EmployeeRepository(Func<AppDbContext> contextFunc)
         {
-            appDbContext = context;
+            appDbContextFunc = contextFunc;
         }
 
-        public Task<IEnumerable<Employee>> AllAsync()
+        public async Task<IEnumerable<Employee>> GetAll()
         {
-            throw new NotImplementedException();
+            using (var appDbContext = appDbContextFunc())
+            {
+                return await appDbContext.Employees.ToArrayAsync();
+            }
         }
 
-        public Task CreateAsync(Employee entity)
+        public async Task<Employee> Create(Employee entity)
         {
-            throw new NotImplementedException();
+            using (var appDbContext = appDbContextFunc())
+            {
+
+                var employee = new Employee
+                {
+                    UserName = entity.UserName,
+                    Email = entity.Email
+                };
+
+                appDbContext.Employees.Add(employee);
+                await appDbContext.SaveChangesAsync();
+
+                return employee;
+            }
         }
 
-        public Task DeleteAsync(Employee entity)
+        public async Task Delete(Employee entity)
         {
-            throw new NotImplementedException();
+            using (var appDbContext = appDbContextFunc())
+            {
+                var employee = appDbContext.Employees.Single(x => x.Id == entity.Id);
+                appDbContext.Employees.Remove(employee);
+
+                await appDbContext.SaveChangesAsync();
+            }
         }
 
-        public Task<IEnumerable<Employee>> FindAsync(Func<Employee, bool> predicate)
+
+        public async Task<Employee> FindById(int id)
         {
-            throw new NotImplementedException();
+            using (var appDbContext = appDbContextFunc())
+            {
+                return await appDbContext.Employees.Select(item => new Employee
+                {
+                    // čia kuriu naują, dėl security, kad hashinto password nepaimtų.
+                    UserName = item.UserName,
+                    Email = item.Email,
+                    Id = item.Id
+                })
+                .SingleAsync(task => task.Id == id);
+            }
         }
 
-        public Task<Employee> FirstAsync(Func<Employee, bool> predicate)
+        public async Task Update(Employee entity)
         {
-            throw new NotImplementedException();
-        }
+            using (var appDbContext = appDbContextFunc())
+            {
+                var employee = appDbContext.Employees.Single(x => x.Id == entity.Id);
 
-        public Task UpdateAsync(Employee entity)
-        {
-            throw new NotImplementedException();
+                employee.UserName = entity.UserName;
+                employee.Email = entity.UserName;
+
+                await appDbContext.SaveChangesAsync();
+            }
         }
     }
 }

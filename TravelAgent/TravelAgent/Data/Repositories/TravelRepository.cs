@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,41 +9,70 @@ namespace TravelAgent.Data.Repositories
 {
     public class TravelRepository : IRepository<Travel>
     {
-        private readonly AppDbContext appDbContext;
+        private readonly Func<AppDbContext> appDbContextFunc;
 
-        public TravelRepository(AppDbContext context)
+        public TravelRepository(Func<AppDbContext> contextFunc)
         {
-            appDbContext = context;
+            appDbContextFunc = contextFunc;
         }
 
-        public Task<IEnumerable<Travel>> AllAsync()
+        public async Task<IEnumerable<Travel>> GetAll()
         {
-            throw new NotImplementedException();
+            using (var appDbContext = appDbContextFunc())
+            {
+                return await appDbContext.Travels.ToArrayAsync();
+            }
         }
 
-        public Task CreateAsync(Travel entity)
+        public async Task<Travel> Create(Travel entity)
         {
-            throw new NotImplementedException();
+            using (var appDbContext = appDbContextFunc())
+            {
+                var travel = new Travel
+                {
+                    TravelTo = entity.TravelTo,
+                    TravelFrom = entity.TravelFrom,
+                    OrganizedBy = entity.OrganizedBy
+                };
+
+                appDbContext.Travels.Add(travel);
+                await appDbContext.SaveChangesAsync();
+
+                return travel;
+            }
         }
 
-        public Task DeleteAsync(Travel entity)
+        public async Task Delete(Travel entity)
         {
-            throw new NotImplementedException();
+            using (var appDbContext = appDbContextFunc())
+            {
+                var travel = appDbContext.Travels.Single(x => x.Id == entity.Id);
+                appDbContext.Travels.Remove(travel);
+
+                await appDbContext.SaveChangesAsync();
+            }
         }
 
-        public Task<IEnumerable<Travel>> FindAsync(Func<Travel, bool> predicate)
+        public async Task<Travel> FindById(int id)
         {
-            throw new NotImplementedException();
+            using (var appDbContext = appDbContextFunc())
+            {
+                return await appDbContext.Travels.SingleAsync(x => x.Id == id);
+            }
         }
 
-        public Task<Travel> FirstAsync(Func<Travel, bool> predicate)
+        public async Task Update(Travel entity)
         {
-            throw new NotImplementedException();
-        }
+            using (var appDbContext = appDbContextFunc())
+            {
+                var travel = appDbContext.Travels.Single(x => x.Id == entity.Id);
 
-        public Task UpdateAsync(Travel entity)
-        {
-            throw new NotImplementedException();
+                travel.TravelTo = entity.TravelTo;
+                travel.TravelFrom = entity.TravelFrom;
+                travel.OrganizedBy = entity.OrganizedBy;
+
+                await appDbContext.SaveChangesAsync();
+            }
         }
     }
 }

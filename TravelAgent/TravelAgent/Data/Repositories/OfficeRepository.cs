@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,41 +9,71 @@ namespace TravelAgent.Data.Repositories
 {
     public class OfficeRepository : IRepository<Office>
     {
-        private readonly AppDbContext appDbContext;
+        private readonly Func<AppDbContext> appDbContextFunc;
 
-        public OfficeRepository(AppDbContext context)
+        public OfficeRepository(Func<AppDbContext> contextFunc)
         {
-            appDbContext = context;
+            appDbContextFunc = contextFunc;
         }
 
-        public Task<IEnumerable<Office>> AllAsync()
+        public async Task<IEnumerable<Office>> GetAll()
         {
-            throw new NotImplementedException();
+            using (var appDbContext = appDbContextFunc())
+            {
+                return await appDbContext.Offices.ToArrayAsync();
+            }
         }
 
-        public Task CreateAsync(Office entity)
+        public async Task<Office> Create(Office entity)
         {
-            throw new NotImplementedException();
+            using (var appDbContext = appDbContextFunc())
+            {
+
+                var office = new Office
+                {
+                    Title = entity.Title,
+                    Address = entity.Address
+                };
+
+                appDbContext.Offices.Add(office);
+                await appDbContext.SaveChangesAsync();
+
+                return office;
+            }
         }
 
-        public Task DeleteAsync(Office entity)
+        public async Task Delete(Office entity)
         {
-            throw new NotImplementedException();
+            using (var appDbContext = appDbContextFunc())
+            {
+                var office = appDbContext.Offices.Single(x => x.Id == entity.Id);
+                appDbContext.Offices.Remove(office);
+
+                await appDbContext.SaveChangesAsync();
+            }
         }
 
-        public Task<IEnumerable<Office>> FindAsync(Func<Office, bool> predicate)
+
+        public async Task<Office> FindById(int id)
         {
-            throw new NotImplementedException();
+            using (var appDbContext = appDbContextFunc())
+            {
+                return await  appDbContext.Offices.SingleAsync(x => x.Id == id); 
+            }
         }
 
-        public Task<Office> FirstAsync(Func<Office, bool> predicate)
-        {
-            throw new NotImplementedException();
-        }
 
-        public Task UpdateAsync(Office entity)
+        public async Task Update(Office entity)
         {
-            throw new NotImplementedException();
+            using (var appDbContext = appDbContextFunc())
+            {
+                var office = appDbContext.Offices.Single(x => x.Id == entity.Id);
+
+                office.Title = entity.Title;
+                office.Address = entity.Address;
+
+                await appDbContext.SaveChangesAsync();
+            }
         }
     }
 }
