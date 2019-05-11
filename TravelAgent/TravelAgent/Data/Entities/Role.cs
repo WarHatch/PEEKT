@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace TravelAgent.Data.Entities
 {
-    public class Employee : IdentityUser<int>
+    public class Role : IdentityRole<int>
     {
-        
     }
 }
