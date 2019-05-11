@@ -5,7 +5,13 @@ using System.Threading.Tasks;
 
 namespace TravelAgent.Data.Repositories
 {
-    interface IRepository
+    public interface IRepository<T> where T : class
     {
+        Task<IEnumerable<T>> AllAsync();
+        Task<IEnumerable<T>> FindAsync(Func<T, bool> predicate);
+        Task<T> FirstAsync(Func<T, bool> predicate);
+        Task CreateAsync(T entity);
+        Task DeleteAsync(T entity);
+        Task UpdateAsync(T entity);
     }
 }

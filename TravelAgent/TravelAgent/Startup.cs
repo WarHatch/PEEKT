@@ -7,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using TravelAgent.Data;
+using TravelAgent.Data.Entities;
+using TravelAgent.Data.Repositories;
 
 namespace TravelAgent
 {
@@ -25,6 +27,10 @@ namespace TravelAgent
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddDbContext<AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("TodosConnection")));
+
+            services.AddScoped<IRepository<Employee>,EmployeeRepository>();
+            services.AddScoped<IRepository<Office>, OfficeRepository>();
+            services.AddScoped<IRepository<Travel>, TravelRepository>();
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
