@@ -22,8 +22,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Remove="ClientApp\AccountsController.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="DataContract\Responses\" />
-    <Folder Include="DataContract\Requests\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Controllers\AccountsController.cs" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
