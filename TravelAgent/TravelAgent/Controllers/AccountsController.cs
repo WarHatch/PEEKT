@@ -38,7 +38,7 @@ namespace TravelAgent.ClientApp
                 return Conflict();
             }
 
-            return NoContent();
+            return Ok(DateTime.Now);
         }
 
     }
