@@ -41,5 +41,19 @@ namespace TravelAgent.ClientApp
             return Ok(DateTime.Now);
         }
 
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] LoginRequest login)
+        {
+            var result = await signInManager.PasswordSignInAsync(login.UserName,
+                login.Password, login.RememberMe, false);
+
+            if (!result.Succeeded)
+            {
+                return Conflict();
+            }
+
+            return Ok(DateTime.Now);
+        }
+
     }
 }
