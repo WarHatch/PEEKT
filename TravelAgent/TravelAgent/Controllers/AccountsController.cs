@@ -27,7 +27,7 @@ namespace TravelAgent.ClientApp
         {
             var user = new Employee
             {
-                UserName = registerAccount.UserName,
+                UserName = registerAccount.Email,
                 Email = registerAccount.Email
             };
 
@@ -46,6 +46,7 @@ namespace TravelAgent.ClientApp
         {
             var result = await signInManager.PasswordSignInAsync(login.UserName,
                 login.Password, login.RememberMe, false);
+
 
             if (!result.Succeeded)
             {
