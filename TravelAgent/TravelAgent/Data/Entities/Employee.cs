@@ -8,6 +8,11 @@ namespace TravelAgent.Data.Entities
 {
     public class Employee : IdentityUser<int>
     {
-        
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Picture { get; set; }
+        public Office RegisteredOffice { get; set; }
+        public List<Travel> Travel { get; set; }
+        public bool Available { get; set; }
     }
 }

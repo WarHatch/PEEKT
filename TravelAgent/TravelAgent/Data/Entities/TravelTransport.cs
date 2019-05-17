@@ -6,14 +6,15 @@ using System.Threading.Tasks;
 
 namespace TravelAgent.Data.Entities
 {
-    public class Office
+    public class TravelTransport
     {
         public int Id { get; set; }
         [Required]
-        public Apartment OfficeApartment { get; set; }
+        public Traveler Traveler { get; set; }
         [Required]
-        public string Title { get; set; }
+        public Transport Transport { get; set; }
         [Required]
-        public string Address { get; set; }
+        public DateTime StartTime { get; set; }
+        public DateTime? EndTime { get; set; }
     }
 }

@@ -1,19 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace TravelAgent.Data.Entities
 {
-    public class Office
+    public class Apartment 
     {
         public int Id { get; set; }
-        [Required]
-        public Apartment OfficeApartment { get; set; }
-        [Required]
+        public Office Office { get; set; }
         public string Title { get; set; }
-        [Required]
         public string Address { get; set; }
+        public int FitsPeople { get; set; }
+        public List<Traveler> Travelers { get; set; }
+        public decimal Cost { get; set; }
+        public bool IsOffice { get; set; }
     }
 }
