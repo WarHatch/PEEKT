@@ -10,7 +10,7 @@ using TravelAgent.Data;
 namespace TravelAgent.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20190511150506_InitialCreate")]
+    [Migration("20190518132156_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -104,6 +104,23 @@ namespace TravelAgent.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("TravelAgent.Data.Entities.Apartment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Address");
+
+                    b.Property<int>("FitsPeople");
+
+                    b.Property<string>("Title");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Apartments");
+                });
+
             modelBuilder.Entity("TravelAgent.Data.Entities.Employee", b =>
                 {
                     b.Property<int>("Id")
@@ -112,6 +129,8 @@ namespace TravelAgent.Migrations
 
                     b.Property<int>("AccessFailedCount");
 
+                    b.Property<bool>("Available");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
 
@@ -119,6 +138,10 @@ namespace TravelAgent.Migrations
                         .HasMaxLength(256);
 
                     b.Property<bool>("EmailConfirmed");
+
+                    b.Property<string>("FirstName");
+
+                    b.Property<string>("LastName");
 
                     b.Property<bool>("LockoutEnabled");
 
@@ -135,6 +158,10 @@ namespace TravelAgent.Migrations
                     b.Property<string>("PhoneNumber");
 
                     b.Property<bool>("PhoneNumberConfirmed");
+
+                    b.Property<string>("ProfilePhoto");
+
+                    b.Property<int?>("RegisteredOfficeId");
 
                     b.Property<string>("SecurityStamp");
 
@@ -153,10 +180,33 @@ namespace TravelAgent.Migrations
                         .HasName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
+                    b.HasIndex("RegisteredOfficeId");
+
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("TravelAgent.Data.Entities.Office", b =>
+            modelBuilder.Entity("TravelAgent.Data.Entities.EmployeeTravel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("ApartmentId");
+
+                    b.Property<bool>("Confirm");
+
+                    b.Property<int?>("TravelId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApartmentId");
+
+                    b.HasIndex("TravelId");
+
+                    b.ToTable("EmployeeTravel");
+                });
+
+            modelBuilder.Entity("TravelAgent.Data.Entities.Hotel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -167,7 +217,31 @@ namespace TravelAgent.Migrations
                     b.Property<string>("Title")
                         .IsRequired();
 
+                    b.Property<int?>("TravelId");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("TravelId");
+
+                    b.ToTable("Hotels");
+                });
+
+            modelBuilder.Entity("TravelAgent.Data.Entities.Office", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Address");
+
+                    b.Property<int>("OfficeApartmentId");
+
+                    b.Property<string>("Title")
+                        .IsRequired();
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OfficeApartmentId");
 
                     b.ToTable("Offices");
                 });
@@ -197,19 +271,36 @@ namespace TravelAgent.Migrations
                     b.ToTable("AspNetRoles");
                 });
 
+            modelBuilder.Entity("TravelAgent.Data.Entities.Transport", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Description");
+
+                    b.Property<int>("TypeOfTransport");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Transports");
+                });
+
             modelBuilder.Entity("TravelAgent.Data.Entities.Travel", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("DepartureTime");
+                    b.Property<DateTime>("EndTime");
 
-                    b.Property<DateTime>("ExpectedTime");
+                    b.Property<string>("Name");
 
                     b.Property<int?>("OrganizedById");
 
-                    b.Property<bool>("Status");
+                    b.Property<DateTime>("StartTime");
+
+                    b.Property<int>("Status");
 
                     b.Property<int?>("TravelFromId");
 
@@ -268,6 +359,39 @@ namespace TravelAgent.Migrations
                     b.HasOne("TravelAgent.Data.Entities.Employee")
                         .WithMany()
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("TravelAgent.Data.Entities.Employee", b =>
+                {
+                    b.HasOne("TravelAgent.Data.Entities.Office", "RegisteredOffice")
+                        .WithMany()
+                        .HasForeignKey("RegisteredOfficeId");
+                });
+
+            modelBuilder.Entity("TravelAgent.Data.Entities.EmployeeTravel", b =>
+                {
+                    b.HasOne("TravelAgent.Data.Entities.Apartment", "Apartment")
+                        .WithMany()
+                        .HasForeignKey("ApartmentId");
+
+                    b.HasOne("TravelAgent.Data.Entities.Travel", "Travel")
+                        .WithMany()
+                        .HasForeignKey("TravelId");
+                });
+
+            modelBuilder.Entity("TravelAgent.Data.Entities.Hotel", b =>
+                {
+                    b.HasOne("TravelAgent.Data.Entities.Travel", "Travel")
+                        .WithMany()
+                        .HasForeignKey("TravelId");
+                });
+
+            modelBuilder.Entity("TravelAgent.Data.Entities.Office", b =>
+                {
+                    b.HasOne("TravelAgent.Data.Entities.Apartment", "OfficeApartment")
+                        .WithMany()
+                        .HasForeignKey("OfficeApartmentId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
