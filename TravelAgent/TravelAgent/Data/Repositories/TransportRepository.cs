@@ -60,10 +60,7 @@ namespace TravelAgent.Data.Repositories
             {
                 var transport = appDbContext.Transports.Single(x => x.Id == entity.Id);
 
-                transport.CarNumber = entity.CarNumber;
-                transport.Model = entity.Model;
-                transport.FitsPeople = entity.FitsPeople;
-                transport.Cost = entity.Cost;
+                transport.Description = entity.Description;
                 transport.TypeOfTransport = entity.TypeOfTransport;
 
                 await appDbContext.SaveChangesAsync();

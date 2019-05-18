@@ -7,65 +7,63 @@ using TravelAgent.Data.Entities;
 
 namespace TravelAgent.Data.Repositories
 {
-    public class TravelerRepository : IRepository<Traveler>
+    public class EmployeeTravelRepository : IRepository<EmployeeTravel>
     {
         private readonly Func<AppDbContext> appDbContextFunc;
 
-        public TravelerRepository(Func<AppDbContext> contextFunc)
+        public EmployeeTravelRepository(Func<AppDbContext> contextFunc)
         {
             appDbContextFunc = contextFunc;
         }
 
-        public async Task<Traveler> Create(Traveler entity)
+        public async Task<EmployeeTravel> Create(EmployeeTravel entity)
         {
             using (var appDbContext = appDbContextFunc())
             {
 
-                appDbContext.Travelers.Add(entity);
+                appDbContext.EmployeeTravel.Add(entity);
                 await appDbContext.SaveChangesAsync();
 
                 return entity;
             }
         }
 
-        public async Task Delete(Traveler entity)
+        public async Task Delete(EmployeeTravel entity)
         {
             using (var appDbContext = appDbContextFunc())
             {
-                var traveler = appDbContext.Travelers.Single(x => x.Id == entity.Id);
-                appDbContext.Travelers.Remove(traveler);
+                var traveler = appDbContext.EmployeeTravel.Single(x => x.Id == entity.Id);
+                appDbContext.EmployeeTravel.Remove(traveler);
 
                 await appDbContext.SaveChangesAsync();
             }
         }
 
-        public async Task<Traveler> FindById(int id)
+        public async Task<EmployeeTravel> FindById(int id)
         {
             using (var appDbContext = appDbContextFunc())
             {
-                return await appDbContext.Travelers.SingleAsync(x => x.Id == id);
+                return await appDbContext.EmployeeTravel.SingleAsync(x => x.Id == id);
             }
         }
 
-        public async Task<IEnumerable<Traveler>> GetAll()
+        public async Task<IEnumerable<EmployeeTravel>> GetAll()
         {
             using (var appDbContext = appDbContextFunc())
             {
-                return await appDbContext.Travelers.ToArrayAsync();
+                return await appDbContext.EmployeeTravel.ToArrayAsync();
             }
         }
 
-        public async Task Update(Traveler entity)
+        public async Task Update(EmployeeTravel entity)
         {
             using (var appDbContext = appDbContextFunc())
             {
-                var traveler = appDbContext.Travelers.Single(x => x.Id == entity.Id);
+                var traveler = appDbContext.EmployeeTravel.Single(x => x.Id == entity.Id);
 
-                traveler.ArrivalTime = entity.ArrivalTime;
                 traveler.Travel = entity.Travel;
                 traveler.Apartment = entity.Apartment;
-                traveler.TravelTransports = entity.TravelTransports;
-                traveler.ConfirmedByEmployee = entity.ConfirmedByEmployee;
+                traveler.Confirm = entity.Confirm;
 
                 await appDbContext.SaveChangesAsync();
             }

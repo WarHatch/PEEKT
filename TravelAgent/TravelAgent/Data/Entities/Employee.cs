@@ -10,9 +10,8 @@ namespace TravelAgent.Data.Entities
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public string Picture { get; set; }
+        public string ProfilePhoto { get; set; }
         public Office RegisteredOffice { get; set; }
-        public List<Travel> Travel { get; set; }
         public bool Available { get; set; }
     }
 }

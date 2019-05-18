@@ -16,10 +16,10 @@ namespace TravelAgent.Data
         }
         public DbSet<Apartment> Apartments { get; set; }
         public DbSet<Employee> Employees { get; set; }
+        public DbSet<EmployeeTravel> EmployeeTravel { get; set; }
+        public DbSet<Hotel> Hotels { get; set; }
         public DbSet<Office> Offices { get; set; }
         public DbSet<Transport> Transports { get; set; }
         public DbSet<Travel> Travels { get; set; }
-        public DbSet<Traveler> Travelers { get; set; }
-        public DbSet<TravelerTransport> TravelerTransports { get; set; }
     }
 }

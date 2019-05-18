@@ -13,7 +13,6 @@ namespace TravelAgent.Data.Entities
         public Apartment OfficeApartment { get; set; }
         [Required]
         public string Title { get; set; }
-        [Required]
         public string Address { get; set; }
     }
 }

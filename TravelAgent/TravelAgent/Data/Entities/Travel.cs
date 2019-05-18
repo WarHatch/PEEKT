@@ -10,12 +10,12 @@ namespace TravelAgent.Data.Entities
     public class Travel
     {
         public int Id { get; set; }   
-        public string GroupName { get; set; }
+        public string Name { get; set; }
         [Required]
         public Office TravelTo { get; set; }
         public Office TravelFrom { get; set; }  
-        public DateTime DepartureTime { get; set; }
-        public DateTime ExpectedArrivalTime { get; set; }
+        public DateTime StartTime { get; set; }
+        public DateTime EndTime { get; set; }
         public Status Status { get; set; }
         public Employee OrganizedBy { get; set; }
     }

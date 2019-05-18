@@ -35,9 +35,8 @@ namespace TravelAgent.Data.Repositories
                     Email = entity.Email,
                     FirstName = entity.FirstName,
                     LastName = entity.LastName,
-                    Picture = entity.Picture,
+                    ProfilePhoto = entity.ProfilePhoto,
                     RegisteredOffice = entity.RegisteredOffice,
-                    Travel = entity.Travel,
                     Available = entity.Available
                 };
 
@@ -72,9 +71,8 @@ namespace TravelAgent.Data.Repositories
                     Email = item.Email,
                     FirstName = item.FirstName,
                     LastName = item.LastName,
-                    Picture = item.Picture,
+                    ProfilePhoto = item.ProfilePhoto,
                     RegisteredOffice = item.RegisteredOffice,
-                    Travel = item.Travel,
                     Available = item.Available
                     
                 })

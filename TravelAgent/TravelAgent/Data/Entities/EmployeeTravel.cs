@@ -5,13 +5,11 @@ using System.Threading.Tasks;
 
 namespace TravelAgent.Data.Entities
 {
-    public class Traveler
+    public class EmployeeTravel
     {
         public int Id { get; set; }
-        public DateTime ArrivalTime { get; set; }
         public Travel Travel { get; set; }
         public Apartment Apartment { get; set; }
-        public List<TravelerTransport> TravelTransports { get; set; }
-        public bool ConfirmedByEmployee { get; set; }
+        public bool Confirm { get; set; }
     }
 }

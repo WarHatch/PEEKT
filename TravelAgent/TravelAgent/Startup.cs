@@ -36,12 +36,11 @@ namespace TravelAgent
 
             services.AddScoped<IRepository<Apartment>, ApartmentRepository>();
             services.AddScoped<IRepository<Employee>,EmployeeRepository>();
+            services.AddScoped<IRepository<EmployeeTravel>, EmployeeTravelRepository>();
+            services.AddScoped<IRepository<Hotel>, HotelRepository>();
             services.AddScoped<IRepository<Office>, OfficeRepository>();
             services.AddScoped<IRepository<Transport>, TransportRepository>();
-            services.AddScoped<IRepository<Traveler>, TravelerRepository>();
-            services.AddScoped<IRepository<Travel>, TravelRepository>();
-            services.AddScoped<IRepository<TravelerTransport>, TravelerTransportRepository>();
-
+            services.AddScoped<IRepository<Travel>, TravelRepository>();    
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>

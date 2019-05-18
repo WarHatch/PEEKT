@@ -10,12 +10,7 @@ namespace TravelAgent.Data.Entities
     public class Transport
     {
         public int Id { get; set; }
-        [Required]
-        public string CarNumber { get; set; }
-        public string Model { get; set; }
-        public int FitsPeople { get; set; }
-        public decimal Cost { get; set; }
-        [Required]
+        public string Description { get; set; }
         public Vehicle TypeOfTransport { get; set; }
     }
 }
