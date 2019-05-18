@@ -28,17 +28,10 @@ namespace TravelAgent.Data.Repositories
         {
             using (var appDbContext = appDbContextFunc())
             {
-                var travel = new Travel
-                {
-                    TravelTo = entity.TravelTo,
-                    TravelFrom = entity.TravelFrom,
-                    OrganizedBy = entity.OrganizedBy
-                };
-
-                appDbContext.Travels.Add(travel);
+                appDbContext.Travels.Add(entity);
                 await appDbContext.SaveChangesAsync();
 
-                return travel;
+                return entity;
             }
         }
 
@@ -67,8 +60,13 @@ namespace TravelAgent.Data.Repositories
             {
                 var travel = appDbContext.Travels.Single(x => x.Id == entity.Id);
 
+                travel.GroupName = entity.GroupName;
                 travel.TravelTo = entity.TravelTo;
                 travel.TravelFrom = entity.TravelFrom;
+                travel.OrganizedBy = entity.OrganizedBy;
+                travel.DepartureTime = entity.DepartureTime;
+                travel.ExpectedArrivalTime = entity.ExpectedArrivalTime;
+                travel.Status = entity.Status;
                 travel.OrganizedBy = entity.OrganizedBy;
 
                 await appDbContext.SaveChangesAsync();

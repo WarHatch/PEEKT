@@ -59,15 +59,13 @@ namespace TravelAgent.Data.Repositories
         {
             using (var appDbContext = appDbContextFunc())
             {
-                var traveler = appDbContext.Apartments.Single(x => x.Id == entity.Id);
+                var traveler = appDbContext.Travelers.Single(x => x.Id == entity.Id);
 
-                traveler.Office = entity.Office;
-                traveler.Title = entity.Title;
-                traveler.Address = entity.Address;
-                traveler.FitsPeople = entity.FitsPeople;
-                traveler.Travelers = entity.Travelers;
-                traveler.Cost = entity.Cost;
-                traveler.IsOffice = entity.IsOffice;
+                traveler.ArrivalTime = entity.ArrivalTime;
+                traveler.Travel = entity.Travel;
+                traveler.Apartment = entity.Apartment;
+                traveler.TravelTransports = entity.TravelTransports;
+                traveler.ConfirmedByEmployee = entity.ConfirmedByEmployee;
 
                 await appDbContext.SaveChangesAsync();
             }

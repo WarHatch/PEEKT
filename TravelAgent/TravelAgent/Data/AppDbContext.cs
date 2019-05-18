@@ -20,6 +20,6 @@ namespace TravelAgent.Data
         public DbSet<Transport> Transports { get; set; }
         public DbSet<Travel> Travels { get; set; }
         public DbSet<Traveler> Travelers { get; set; }
-        public DbSet<TravelerTransport> TravelTransports { get; set; }
+        public DbSet<TravelerTransport> TravelerTransports { get; set; }
     }
 }
