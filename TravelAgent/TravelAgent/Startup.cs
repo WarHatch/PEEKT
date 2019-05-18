@@ -34,9 +34,13 @@ namespace TravelAgent
             // Duombazë
             services.AddDbContext<AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("TodosConnection")));
 
+            services.AddScoped<IRepository<Apartment>, ApartmentRepository>();
             services.AddScoped<IRepository<Employee>,EmployeeRepository>();
+            services.AddScoped<IRepository<EmployeeTravel>, EmployeeTravelRepository>();
+            services.AddScoped<IRepository<Hotel>, HotelRepository>();
             services.AddScoped<IRepository<Office>, OfficeRepository>();
-            services.AddScoped<IRepository<Travel>, TravelRepository>();
+            services.AddScoped<IRepository<Transport>, TransportRepository>();
+            services.AddScoped<IRepository<Travel>, TravelRepository>();    
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>

@@ -32,7 +32,12 @@ namespace TravelAgent.Data.Repositories
                 var employee = new Employee
                 {
                     UserName = entity.UserName,
-                    Email = entity.Email
+                    Email = entity.Email,
+                    FirstName = entity.FirstName,
+                    LastName = entity.LastName,
+                    ProfilePhoto = entity.ProfilePhoto,
+                    RegisteredOffice = entity.RegisteredOffice,
+                    Available = entity.Available
                 };
 
                 appDbContext.Employees.Add(employee);
@@ -61,9 +66,15 @@ namespace TravelAgent.Data.Repositories
                 return await appDbContext.Employees.Select(item => new Employee
                 {
                     // čia kuriu naują, dėl security, kad hashinto password nepaimtų.
+                    Id = item.Id,
                     UserName = item.UserName,
                     Email = item.Email,
-                    Id = item.Id
+                    FirstName = item.FirstName,
+                    LastName = item.LastName,
+                    ProfilePhoto = item.ProfilePhoto,
+                    RegisteredOffice = item.RegisteredOffice,
+                    Available = item.Available
+                    
                 })
                 .SingleAsync(task => task.Id == id);
             }
