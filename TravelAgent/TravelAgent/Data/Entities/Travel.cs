@@ -16,7 +16,6 @@ namespace TravelAgent.Data.Entities
         public Office TravelFrom { get; set; }  
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
-        public Status Status { get; set; }
         public Employee OrganizedBy { get; set; }
     }
 }
