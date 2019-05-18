@@ -11,7 +11,7 @@ namespace TravelAgent.Data.Entities
         public DateTime ArrivalTime { get; set; }
         public Travel Travel { get; set; }
         public Apartment Apartment { get; set; }
-        public List<TravelTransport> TravelTransports { get; set; }
+        public List<TravelerTransport> TravelTransports { get; set; }
         public bool ConfirmedByEmployee { get; set; }
     }
 }

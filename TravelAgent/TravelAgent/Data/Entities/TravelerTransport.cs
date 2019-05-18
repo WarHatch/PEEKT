@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TravelAgent.Data.Entities
 {
-    public class TravelTransport
+    public class TravelerTransport
     {
         public int Id { get; set; }
         [Required]
@@ -14,7 +14,7 @@ namespace TravelAgent.Data.Entities
         [Required]
         public Transport Transport { get; set; }
         [Required]
-        public DateTime StartTime { get; set; }
-        public DateTime? EndTime { get; set; }
+        public DateTime DepartureTime { get; set; }
+        public DateTime? ArrivalTime { get; set; }
     }
 }
