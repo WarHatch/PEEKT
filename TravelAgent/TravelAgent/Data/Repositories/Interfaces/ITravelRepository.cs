@@ -6,7 +6,7 @@ using TravelAgent.Data.Entities;
 
 namespace TravelAgent.Data.Repositories.Interfaces
 {
-    interface ITravelRepository : IRepository<Travel>
+    public interface ITravelRepository : IRepository<Travel>
     {
     }
 }

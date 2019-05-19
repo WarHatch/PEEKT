@@ -10,11 +10,11 @@ namespace TravelAgent.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class EmployeeController : ControllerBase
+    public class EmployeesController : ControllerBase
     {
         private readonly IEmployeeRepository _employeeRepository;
 
-        public EmployeeController(IEmployeeRepository employeeRepository)
+        public EmployeesController(IEmployeeRepository employeeRepository)
         {
             _employeeRepository = employeeRepository;
         }
