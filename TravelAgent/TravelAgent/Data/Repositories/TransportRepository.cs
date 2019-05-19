@@ -10,62 +10,52 @@ namespace TravelAgent.Data.Repositories
 {
     public class TransportRepository : ITransportRepository
     {
-        private readonly AppDbContext appDbContextFunc;
+        private readonly AppDbContext appDbContext;
 
-        public TransportRepository(AppDbContext contextFunc)
+        public TransportRepository(AppDbContext context)
         {
-            appDbContextFunc = contextFunc;
+            appDbContext = context;
         }
         public async Task<Transport> Create(Transport entity)
         {
-            using (var appDbContext = appDbContextFunc)
-            {
 
-                appDbContext.Transports.Add(entity);
-                await appDbContext.SaveChangesAsync();
+            appDbContext.Transports.Add(entity);
+            await appDbContext.SaveChangesAsync();
 
-                return entity;
-            }
+            return entity;
         }
 
         public async Task Delete(Transport entity)
         {
-            using (var appDbContext = appDbContextFunc)
-            {
-                var transports = appDbContext.Transports.Single(x => x.Id == entity.Id);
-                appDbContext.Transports.Remove(transports);
 
-                await appDbContext.SaveChangesAsync();
-            }
+            var transports = appDbContext.Transports.Single(x => x.Id == entity.Id);
+            appDbContext.Transports.Remove(transports);
+
+            await appDbContext.SaveChangesAsync();
         }
 
         public async Task<Transport> FindById(int id)
         {
-            using (var appDbContext = appDbContextFunc)
-            {
-                return await appDbContext.Transports.SingleAsync(x => x.Id == id);
-            }
+
+            return await appDbContext.Transports.SingleAsync(x => x.Id == id);
+
         }
 
         public async Task<IEnumerable<Transport>> GetAll()
         {
-            using (var appDbContext = appDbContextFunc)
-            {
-                return await appDbContext.Transports.ToArrayAsync();
-            }
+            return await appDbContext.Transports.ToArrayAsync();
         }
 
         public async Task Update(Transport entity)
         {
-            using (var appDbContext = appDbContextFunc)
-            {
-                var transport = appDbContext.Transports.Single(x => x.Id == entity.Id);
 
-                transport.Description = entity.Description;
-                transport.TypeOfTransport = entity.TypeOfTransport;
+            var transport = appDbContext.Transports.Single(x => x.Id == entity.Id);
 
-                await appDbContext.SaveChangesAsync();
-            }
+            transport.Description = entity.Description;
+            transport.TypeOfTransport = entity.TypeOfTransport;
+
+            await appDbContext.SaveChangesAsync();
+
         }
     }
 }

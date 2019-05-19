@@ -9,9 +9,9 @@ namespace TravelAgent.Data.Entities
 {
     public class Travel
     {
-        public int Id { get; set; }   
+        public int Id { get; set; }
+        [Required]  
         public string Name { get; set; }
-        [Required]
         public Office TravelTo { get; set; }
         public Office TravelFrom { get; set; }  
         public DateTime StartTime { get; set; }

@@ -10,63 +10,55 @@ namespace TravelAgent.Data.Repositories
 {
     public class ApartmentRepository : IApartmentRepository
     {
-        private readonly AppDbContext appDbContextFunc;
+        private readonly AppDbContext appDbContext;
 
-        public ApartmentRepository(AppDbContext contextFunc)
+        public ApartmentRepository(AppDbContext context)
         {
-            appDbContextFunc = contextFunc;
+            appDbContext = context;
         }
         public async Task<Apartment> Create(Apartment entity)
         {
-            using (var appDbContext = appDbContextFunc)
-            {
 
-                appDbContext.Apartments.Add(entity);
-                await appDbContext.SaveChangesAsync();
+            appDbContext.Apartments.Add(entity);
+            await appDbContext.SaveChangesAsync();
 
-                return entity;
-            }
+            return entity;
+
         }
 
         public async Task Delete(Apartment entity)
         {
-            using (var appDbContext = appDbContextFunc)
-            {
-                var apartment = appDbContext.Apartments.Single(x => x.Id == entity.Id);
-                appDbContext.Apartments.Remove(apartment);
 
-                await appDbContext.SaveChangesAsync();
-            }
+            var apartment = appDbContext.Apartments.Single(x => x.Id == entity.Id);
+            appDbContext.Apartments.Remove(apartment);
+
+            await appDbContext.SaveChangesAsync();
+
         }
 
         public async Task<Apartment> FindById(int id)
         {
-            using (var appDbContext = appDbContextFunc)
-            {
-                return await appDbContext.Apartments.SingleAsync(x => x.Id == id);
-            }
+
+            return await appDbContext.Apartments.SingleAsync(x => x.Id == id);
+
         }
 
         public async Task<IEnumerable<Apartment>> GetAll()
         {
-            using (var appDbContext = appDbContextFunc)
-            {
-                return await appDbContext.Apartments.ToArrayAsync();
-            }
+            return await appDbContext.Apartments.ToArrayAsync();
         }
 
         public async Task Update(Apartment entity)
         {
-            using (var appDbContext = appDbContextFunc)
-            {
-                var apartment = appDbContext.Apartments.Single(x => x.Id == entity.Id);
 
-                apartment.Title = entity.Title;
-                apartment.Address = entity.Address;
-                apartment.FitsPeople = entity.FitsPeople;
+            var apartment = appDbContext.Apartments.Single(x => x.Id == entity.Id);
 
-                await appDbContext.SaveChangesAsync();
-            }
+            apartment.Title = entity.Title;
+            apartment.Address = entity.Address;
+            apartment.FitsPeople = entity.FitsPeople;
+
+            await appDbContext.SaveChangesAsync();
+
         }
     }
 }

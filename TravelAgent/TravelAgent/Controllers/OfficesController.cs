@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TravelAgent.Data.Entities;
 using TravelAgent.Data.Repositories.Interfaces;
+using TravelAgent.DataContract.Requests;
 
 namespace TravelAgent.Controllers
 {
@@ -13,10 +14,12 @@ namespace TravelAgent.Controllers
     public class OfficesController : ControllerBase
     {
         private readonly IOfficeRepository _officeRepository;
+        private readonly IApartmentRepository _apartmentRepository;
 
-        public OfficesController(IOfficeRepository officeRepository)
+        public OfficesController(IOfficeRepository officeRepository, IApartmentRepository apartmentRepository)
         {
             _officeRepository = officeRepository;
+            _apartmentRepository = apartmentRepository;
         }
 
         [HttpGet]
@@ -29,6 +32,25 @@ namespace TravelAgent.Controllers
         public async Task<ActionResult<Office>> GetById(int id)
         {
             return Ok(await _officeRepository.FindById(id));
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<Office>> CreateOffice([FromBody]CreateOfficeRequest officeRequest)
+        {
+            try
+            {
+                var office = new Office
+                {
+                    Title = officeRequest.Title,
+                    OfficeApartment = await _apartmentRepository.FindById(officeRequest.OfficeApartmentId),
+                    Address = officeRequest.Address
+                };
+                return Ok(await _officeRepository.Create(office));
+            }
+            catch (ArgumentException)
+            {
+                return Conflict();
+            }
         }
     }
 }
