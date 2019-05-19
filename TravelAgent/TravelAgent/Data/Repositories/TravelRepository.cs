@@ -4,21 +4,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TravelAgent.Data.Entities;
+using TravelAgent.Data.Repositories.Interfaces;
 
 namespace TravelAgent.Data.Repositories
 {
-    public class TravelRepository : IRepository<Travel>
+    public class TravelRepository : ITravelRepository
     {
-        private readonly Func<AppDbContext> appDbContextFunc;
+        private readonly AppDbContext appDbContextFunc;
 
-        public TravelRepository(Func<AppDbContext> contextFunc)
+        public TravelRepository(AppDbContext contextFunc)
         {
             appDbContextFunc = contextFunc;
         }
 
         public async Task<IEnumerable<Travel>> GetAll()
         {
-            using (var appDbContext = appDbContextFunc())
+            using (var appDbContext = appDbContextFunc)
             {
                 return await appDbContext.Travels.ToArrayAsync();
             }
@@ -26,7 +27,7 @@ namespace TravelAgent.Data.Repositories
 
         public async Task<Travel> Create(Travel entity)
         {
-            using (var appDbContext = appDbContextFunc())
+            using (var appDbContext = appDbContextFunc)
             {
                 appDbContext.Travels.Add(entity);
                 await appDbContext.SaveChangesAsync();
@@ -37,7 +38,7 @@ namespace TravelAgent.Data.Repositories
 
         public async Task Delete(Travel entity)
         {
-            using (var appDbContext = appDbContextFunc())
+            using (var appDbContext = appDbContextFunc)
             {
                 var travel = appDbContext.Travels.Single(x => x.Id == entity.Id);
                 appDbContext.Travels.Remove(travel);
@@ -48,7 +49,7 @@ namespace TravelAgent.Data.Repositories
 
         public async Task<Travel> FindById(int id)
         {
-            using (var appDbContext = appDbContextFunc())
+            using (var appDbContext = appDbContextFunc)
             {
                 return await appDbContext.Travels.SingleAsync(x => x.Id == id);
             }
@@ -56,7 +57,7 @@ namespace TravelAgent.Data.Repositories
 
         public async Task Update(Travel entity)
         {
-            using (var appDbContext = appDbContextFunc())
+            using (var appDbContext = appDbContextFunc)
             {
                 var travel = appDbContext.Travels.Single(x => x.Id == entity.Id);
 

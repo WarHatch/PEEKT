@@ -13,13 +13,13 @@ namespace TravelAgent.ClientApp
     [Route("api/[controller]")]
     public class AccountsController : ControllerBase
     {
-        private readonly UserManager<Employee> userManager;
-        private readonly SignInManager<Employee> signInManager;
+        private readonly UserManager<Employee> _userManager;
+        private readonly SignInManager<Employee> _signInManager;
 
         public AccountsController(UserManager<Employee> userManager, SignInManager<Employee> signInManager)
         {
-            this.userManager = userManager;
-            this.signInManager = signInManager;
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
 
         [HttpPost("register")]
@@ -31,7 +31,7 @@ namespace TravelAgent.ClientApp
                 Email = registerAccount.Email
             };
 
-            var result = await userManager.CreateAsync(user, registerAccount.Password);
+            var result = await _userManager.CreateAsync(user, registerAccount.Password);
 
             if (!result.Succeeded)
             {
@@ -44,7 +44,7 @@ namespace TravelAgent.ClientApp
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequest login)
         {
-            var result = await signInManager.PasswordSignInAsync(login.UserName,
+            var result = await _signInManager.PasswordSignInAsync(login.UserName,
                 login.Password, login.RememberMe, false);
 
 

@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using TravelAgent.Data;
 using TravelAgent.Data.Entities;
 using TravelAgent.Data.Repositories;
+using TravelAgent.Data.Repositories.Interfaces;
 
 namespace TravelAgent
 {
@@ -34,13 +35,13 @@ namespace TravelAgent
             // Duombazë
             services.AddDbContext<AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("TodosConnection")));
 
-            services.AddScoped<IRepository<Apartment>, ApartmentRepository>();
-            services.AddScoped<IRepository<Employee>,EmployeeRepository>();
-            services.AddScoped<IRepository<EmployeeTravel>, EmployeeTravelRepository>();
-            services.AddScoped<IRepository<Hotel>, HotelRepository>();
-            services.AddScoped<IRepository<Office>, OfficeRepository>();
-            services.AddScoped<IRepository<Transport>, TransportRepository>();
-            services.AddScoped<IRepository<Travel>, TravelRepository>();    
+            services.AddScoped<IApartmentRepository, ApartmentRepository>();
+            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            services.AddScoped<IEmployeeTravelRepository, EmployeeTravelRepository>();
+            services.AddScoped<IHotelRepository, HotelRepository>();
+            services.AddScoped<IOfficeRepository, OfficeRepository>();
+            services.AddScoped<ITransportRepository, TransportRepository>();
+            services.AddScoped<ITravelRepository, TravelRepository>();    
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>

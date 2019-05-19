@@ -4,20 +4,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TravelAgent.Data.Entities;
+using TravelAgent.Data.Repositories.Interfaces;
 
 namespace TravelAgent.Data.Repositories
 {
-    public class HotelRepository : IRepository<Hotel>
+    public class HotelRepository : IHotelRepository
     {
-        private readonly Func<AppDbContext> appDbContextFunc;
+        private readonly AppDbContext appDbContextFunc;
 
-        public HotelRepository(Func<AppDbContext> contextFunc)
+        public HotelRepository(AppDbContext contextFunc)
         {
             appDbContextFunc = contextFunc;
         }
         public async Task<Hotel> Create(Hotel entity)
         {
-            using (var appDbContext = appDbContextFunc())
+            using (var appDbContext = appDbContextFunc)
             {
 
                 appDbContext.Hotels.Add(entity);
@@ -29,7 +30,7 @@ namespace TravelAgent.Data.Repositories
 
         public async Task Delete(Hotel entity)
         {
-            using (var appDbContext = appDbContextFunc())
+            using (var appDbContext = appDbContextFunc)
             {
                 var apartment = appDbContext.Hotels.Single(x => x.Id == entity.Id);
                 appDbContext.Hotels.Remove(apartment);
@@ -40,7 +41,7 @@ namespace TravelAgent.Data.Repositories
 
         public async Task<Hotel> FindById(int id)
         {
-            using (var appDbContext = appDbContextFunc())
+            using (var appDbContext = appDbContextFunc)
             {
                 return await appDbContext.Hotels.SingleAsync(x => x.Id == id);
             }
@@ -48,7 +49,7 @@ namespace TravelAgent.Data.Repositories
 
         public async Task<IEnumerable<Hotel>> GetAll()
         {
-            using (var appDbContext = appDbContextFunc())
+            using (var appDbContext = appDbContextFunc)
             {
                 return await appDbContext.Hotels.ToArrayAsync();
             }
@@ -56,7 +57,7 @@ namespace TravelAgent.Data.Repositories
 
         public async Task Update(Hotel entity)
         {
-            using (var appDbContext = appDbContextFunc())
+            using (var appDbContext = appDbContextFunc)
             {
                 var hotel = appDbContext.Hotels.Single(x => x.Id == entity.Id);
 
