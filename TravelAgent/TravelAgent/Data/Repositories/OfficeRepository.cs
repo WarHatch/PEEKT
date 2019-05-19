@@ -4,10 +4,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TravelAgent.Data.Entities;
+using TravelAgent.Data.Repositories.Interfaces;
 
 namespace TravelAgent.Data.Repositories
 {
-    public class OfficeRepository : IRepository<Office>
+    public class OfficeRepository : IOfficeRepository
     {
         private readonly Func<AppDbContext> appDbContextFunc;
 
