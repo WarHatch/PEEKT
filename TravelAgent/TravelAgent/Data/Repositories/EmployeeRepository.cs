@@ -10,16 +10,16 @@ namespace TravelAgent.Data.Repositories
 {
     public class EmployeeRepository : IEmployeeRepository
     {
-        private readonly Func<AppDbContext> appDbContextFunc;
+        private readonly AppDbContext appDbContextFunc;
 
-        public EmployeeRepository(Func<AppDbContext> contextFunc)
+        public EmployeeRepository(AppDbContext contextFunc)
         {
             appDbContextFunc = contextFunc;
         }
 
         public async Task<IEnumerable<Employee>> GetAll()
         {
-            using (var appDbContext = appDbContextFunc())
+            using (var appDbContext = appDbContextFunc)
             {
                 return await appDbContext.Employees.ToArrayAsync();
             }
@@ -27,7 +27,7 @@ namespace TravelAgent.Data.Repositories
 
         public async Task<Employee> Create(Employee entity)
         {
-            using (var appDbContext = appDbContextFunc())
+            using (var appDbContext = appDbContextFunc)
             {
 
                 var employee = new Employee
@@ -50,7 +50,7 @@ namespace TravelAgent.Data.Repositories
 
         public async Task Delete(Employee entity)
         {
-            using (var appDbContext = appDbContextFunc())
+            using (var appDbContext = appDbContextFunc)
             {
                 var employee = appDbContext.Employees.Single(x => x.Id == entity.Id);
                 appDbContext.Employees.Remove(employee);
@@ -62,7 +62,7 @@ namespace TravelAgent.Data.Repositories
 
         public async Task<Employee> FindById(int id)
         {
-            using (var appDbContext = appDbContextFunc())
+            using (var appDbContext = appDbContextFunc)
             {
                 return await appDbContext.Employees.Select(item => new Employee
                 {
@@ -83,7 +83,7 @@ namespace TravelAgent.Data.Repositories
 
         public async Task Update(Employee entity)
         {
-            using (var appDbContext = appDbContextFunc())
+            using (var appDbContext = appDbContextFunc)
             {
                 var employee = appDbContext.Employees.Single(x => x.Id == entity.Id);
 

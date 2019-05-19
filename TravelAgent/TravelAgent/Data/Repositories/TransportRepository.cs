@@ -10,15 +10,15 @@ namespace TravelAgent.Data.Repositories
 {
     public class TransportRepository : ITransportRepository
     {
-        private readonly Func<AppDbContext> appDbContextFunc;
+        private readonly AppDbContext appDbContextFunc;
 
-        public TransportRepository(Func<AppDbContext> contextFunc)
+        public TransportRepository(AppDbContext contextFunc)
         {
             appDbContextFunc = contextFunc;
         }
         public async Task<Transport> Create(Transport entity)
         {
-            using (var appDbContext = appDbContextFunc())
+            using (var appDbContext = appDbContextFunc)
             {
 
                 appDbContext.Transports.Add(entity);
@@ -30,7 +30,7 @@ namespace TravelAgent.Data.Repositories
 
         public async Task Delete(Transport entity)
         {
-            using (var appDbContext = appDbContextFunc())
+            using (var appDbContext = appDbContextFunc)
             {
                 var transports = appDbContext.Transports.Single(x => x.Id == entity.Id);
                 appDbContext.Transports.Remove(transports);
@@ -41,7 +41,7 @@ namespace TravelAgent.Data.Repositories
 
         public async Task<Transport> FindById(int id)
         {
-            using (var appDbContext = appDbContextFunc())
+            using (var appDbContext = appDbContextFunc)
             {
                 return await appDbContext.Transports.SingleAsync(x => x.Id == id);
             }
@@ -49,7 +49,7 @@ namespace TravelAgent.Data.Repositories
 
         public async Task<IEnumerable<Transport>> GetAll()
         {
-            using (var appDbContext = appDbContextFunc())
+            using (var appDbContext = appDbContextFunc)
             {
                 return await appDbContext.Transports.ToArrayAsync();
             }
@@ -57,7 +57,7 @@ namespace TravelAgent.Data.Repositories
 
         public async Task Update(Transport entity)
         {
-            using (var appDbContext = appDbContextFunc())
+            using (var appDbContext = appDbContextFunc)
             {
                 var transport = appDbContext.Transports.Single(x => x.Id == entity.Id);
 
