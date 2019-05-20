@@ -58,6 +58,7 @@ namespace TravelAgent.Data.Repositories
             travel.TravelFrom = entity.TravelFrom;
             travel.OrganizedBy = entity.OrganizedBy;
             travel.StartTime = entity.StartTime;
+            travel.Cost = entity.Cost;
             travel.OrganizedBy = entity.OrganizedBy;
 
             await appDbContext.SaveChangesAsync();

@@ -53,8 +53,9 @@ namespace TravelAgent.Controllers
                     Name = request.Name,
                     TravelTo = await _officeRepository.FindById(request.TravelToId),
                     TravelFrom = await _officeRepository.FindById(request.TravelToId),
-                    StartTime = date1, //request.StartTime,
-                    EndTime = date1, //request.EndTime,
+                    StartTime = request.StartTime,
+                    EndTime = request.EndTime,
+                    Cost = request.Cost,
                     OrganizedBy = await _employeeRepository.FindById(request.OrganizedById)
                 };
                 return Ok(await _travelRepository.Create(travel));
