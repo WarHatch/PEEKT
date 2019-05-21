@@ -44,7 +44,15 @@ namespace TravelAgent.Data.Repositories
 
         public async Task<Office> FindById(int id)
         {
-            return await appDbContext.Offices.SingleAsync(x => x.Id == id);
+            try
+            { 
+                return await appDbContext.Offices.SingleAsync(x => x.Id == id);
+            }
+            catch (InvalidOperationException)
+            {
+                throw new ArgumentException("There isn't any office with this id");
+            }
+
         }
 
 

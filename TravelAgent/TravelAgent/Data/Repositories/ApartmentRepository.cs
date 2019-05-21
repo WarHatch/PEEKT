@@ -38,8 +38,14 @@ namespace TravelAgent.Data.Repositories
 
         public async Task<Apartment> FindById(int id)
         {
-
-            return await appDbContext.Apartments.SingleAsync(x => x.Id == id);
+            try
+            {
+                return await appDbContext.Apartments.SingleAsync(x => x.Id == id);
+            }
+            catch (InvalidOperationException)
+            {
+                throw new ArgumentException("There isn't any apartment with this id");
+            }
 
         }
 

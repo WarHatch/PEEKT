@@ -44,8 +44,15 @@ namespace TravelAgent.Data.Repositories
         }
 
         public async Task<Travel> FindById(int id)
-        {
-            return await appDbContext.Travels.SingleAsync(x => x.Id == id);
+        {            
+            try
+            {
+                return await appDbContext.Travels.SingleAsync(x => x.Id == id);
+            }
+            catch (InvalidOperationException)
+            {
+                throw new ArgumentException("There isn't any travels with this id");
+            }
         }
 
         public async Task Update(Travel entity)
