@@ -50,6 +50,19 @@ namespace TravelAgent.Controllers
         {
             try
             {
+                /*
+                if (request.Hotels != null)
+                    foreach (Hotel hotel in request.Hotels)
+                    {
+                        await _hotelRepository.Create(hotel);
+                    }
+                if (request.Transports != null)
+                    foreach (Transport transport in request.Transports)
+                    {
+                        await _transportRepository.Create(transport);
+                    }
+
+                */
                 var travel = new Travel
                 {
                     Name = request.Name,
@@ -132,8 +145,9 @@ namespace TravelAgent.Controllers
         {
             try
             {
-                Travel travel = await _travelRepository.FindById(id);
-                if (travel.Hotels != null)
+                
+                //Travel travel = await _travelRepository.FindById(id);
+                /*if (travel.Hotels != null)
                     foreach (Hotel hotel in travel.Hotels)
                     {
                         await _hotelRepository.Delete(hotel);
@@ -142,8 +156,8 @@ namespace TravelAgent.Controllers
                     foreach (Transport transport in travel.Transports)
                     {
                         await _transportRepository.Delete(transport);
-                    }
-                await _travelRepository.Delete(travel);
+                    }*/
+                await _travelRepository.Delete(await _travelRepository.FindById(id));
                 return Ok();
             }
             catch (ArgumentException e)

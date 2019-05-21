@@ -19,7 +19,7 @@ namespace TravelAgent.Data.Repositories
 
         public async Task<IEnumerable<Office>> GetAll()
         {
-            return await appDbContext.Offices.ToArrayAsync();
+            return await appDbContext.Offices.Include(x => x.OfficeApartment).ToArrayAsync();
         }
 
         public async Task<Office> Create(Office entity)
@@ -45,8 +45,10 @@ namespace TravelAgent.Data.Repositories
         public async Task<Office> FindById(int id)
         {
             try
-            { 
-                return await appDbContext.Offices.SingleAsync(x => x.Id == id);
+            {
+                Office office = await appDbContext.Offices.SingleAsync(x => x.Id == id);
+                Console.WriteLine(office.OfficeApartment.Id);
+                return await appDbContext.Offices.Include(x => x.OfficeApartment).SingleAsync(x => x.Id == id);
             }
             catch (InvalidOperationException)
             {

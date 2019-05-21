@@ -22,7 +22,7 @@ namespace TravelAgent.Data.Repositories
         {
 
 
-            return await appDbContext.Travels.ToArrayAsync();
+            return await appDbContext.Travels.Include(x => x.OrganizedBy).Include(x => x.TravelTo).Include(x => x.TravelFrom).Include(x => x.Hotels).Include(x => x.Transports).ToArrayAsync();
 
         }
 
@@ -47,7 +47,7 @@ namespace TravelAgent.Data.Repositories
         {            
             try
             {
-                return await appDbContext.Travels.SingleAsync(x => x.Id == id);
+                return await appDbContext.Travels.Include(x => x.OrganizedBy).Include(x => x.TravelTo).Include(x => x.TravelFrom).Include(x => x.Hotels).Include(x => x.Transports).SingleAsync(x => x.Id == id);
             }
             catch (InvalidOperationException)
             {
