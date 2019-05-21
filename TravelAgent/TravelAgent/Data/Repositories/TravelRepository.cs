@@ -56,8 +56,8 @@ namespace TravelAgent.Data.Repositories
             travel.Name = entity.Name;
             travel.TravelTo = entity.TravelTo;
             travel.TravelFrom = entity.TravelFrom;
-            travel.OrganizedBy = entity.OrganizedBy;
             travel.StartTime = entity.StartTime;
+            travel.EndTime = entity.EndTime;
             travel.Cost = entity.Cost;
             travel.OrganizedBy = entity.OrganizedBy;
 

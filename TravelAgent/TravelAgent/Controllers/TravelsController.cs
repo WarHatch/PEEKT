@@ -46,8 +46,6 @@ namespace TravelAgent.Controllers
         {
             try
             {
-                DateTime date1 = new DateTime(2019, 5, 1, 8, 30, 52);
-
                 var travel = new Travel
                 {
                     Name = request.Name,
@@ -66,5 +64,19 @@ namespace TravelAgent.Controllers
             }
         }
 
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateTravel(int id, Travel updateTravel)
+        {
+            try
+            {
+                updateTravel.Id = id;
+                await _travelRepository.Update(updateTravel);
+                return Ok();
+            }
+            catch (InvalidOperationException)
+            {
+                return NotFound();
+            }
+        }
     }
 }

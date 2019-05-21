@@ -11,12 +11,14 @@ namespace TravelAgent.Data.Entities
     public class Travel
     {
         public int Id { get; set; }
-        [Required]  
+        [Required]
         public string Name { get; set; }
         public Office TravelTo { get; set; }
-        public Office TravelFrom { get; set; }  
+        public Office TravelFrom { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
+        public List<Hotel> Hotels { get; set; }
+        public List<Transport> Transports { get; set; }
         [Column(TypeName = "decimal(18,2)")]
         public decimal Cost { get; set; }
         public Employee OrganizedBy { get; set; }
