@@ -47,15 +47,12 @@ namespace TravelAgent.Controllers
         public async Task<ActionResult<Travel>> CreateTravel([FromBody]CreateTravelRequest request)
         {
             try
-            {/*
-                foreach (Hotel hotel in request.Hotels) {
-                    await _hotelRepository.Create(hotel);
-                }*/
+            {
                 var travel = new Travel
                 {
                     Name = request.Name,
                     TravelTo = await _officeRepository.FindById(request.TravelToId),
-                    TravelFrom = await _officeRepository.FindById(request.TravelToId),
+                    TravelFrom = await _officeRepository.FindById(request.TravelFromId),
                     StartTime = request.StartTime,
                     EndTime = request.EndTime,
                     Hotels = request.Hotels,
@@ -72,12 +69,21 @@ namespace TravelAgent.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateTravel(int id, Travel updateTravel)
+        public async Task<ActionResult<Travel>> UpdateTravel(int id, [FromBody]UpdateTravelRequest request)
         {
             try
             {
-                updateTravel.Id = id;
-                await _travelRepository.Update(updateTravel);
+                var travel = await _travelRepository.FindById(id);
+                if (request.TravelToId != 0)
+                { 
+                    travel.TravelTo = await _officeRepository.FindById(request.TravelToId);
+                }
+                if (request.TravelFromId != 0)
+                { 
+                    travel.TravelFrom = await _officeRepository.FindById(request.TravelFromId);
+                }
+
+                await _travelRepository.Update(travel);
                 return Ok();
             }
             catch (InvalidOperationException)

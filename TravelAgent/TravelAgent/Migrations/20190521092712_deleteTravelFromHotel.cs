@@ -11,9 +11,6 @@ namespace TravelAgent.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "TravelId",
-                table: "Hotels");
         }
     }
 }
