@@ -10,71 +10,52 @@ namespace TravelAgent.Data.Repositories
 {
     public class OfficeRepository : IOfficeRepository
     {
-        private readonly AppDbContext appDbContextFunc;
+        private readonly AppDbContext appDbContext;
 
-        public OfficeRepository(AppDbContext contextFunc)
+        public OfficeRepository(AppDbContext context)
         {
-            appDbContextFunc = contextFunc;
+            appDbContext = context;
         }
 
         public async Task<IEnumerable<Office>> GetAll()
         {
-            using (var appDbContext = appDbContextFunc)
-            {
-                return await appDbContext.Offices.ToArrayAsync();
-            }
+            return await appDbContext.Offices.ToArrayAsync();
         }
 
         public async Task<Office> Create(Office entity)
         {
-            using (var appDbContext = appDbContextFunc)
-            {
 
-                var office = new Office
-                {
-                    Title = entity.Title,
-                    Address = entity.Address
-                };
+            appDbContext.Offices.Add(entity);
+            await appDbContext.SaveChangesAsync();
 
-                appDbContext.Offices.Add(office);
-                await appDbContext.SaveChangesAsync();
-
-                return office;
-            }
+            return entity;
         }
 
         public async Task Delete(Office entity)
         {
-            using (var appDbContext = appDbContextFunc)
-            {
-                var office = appDbContext.Offices.Single(x => x.Id == entity.Id);
-                appDbContext.Offices.Remove(office);
 
-                await appDbContext.SaveChangesAsync();
-            }
+            var office = appDbContext.Offices.Single(x => x.Id == entity.Id);
+            appDbContext.Offices.Remove(office);
+
+            await appDbContext.SaveChangesAsync();
+
         }
 
 
         public async Task<Office> FindById(int id)
         {
-            using (var appDbContext = appDbContextFunc)
-            {
-                return await  appDbContext.Offices.SingleAsync(x => x.Id == id); 
-            }
+            return await appDbContext.Offices.SingleAsync(x => x.Id == id);
         }
 
 
         public async Task Update(Office entity)
         {
-            using (var appDbContext = appDbContextFunc)
-            {
-                var office = appDbContext.Offices.Single(x => x.Id == entity.Id);
+            var office = appDbContext.Offices.Single(x => x.Id == entity.Id);
 
-                office.Title = entity.Title;
-                office.Address = entity.Address;
+            office.Title = entity.Title;
+            office.Address = entity.Address;
 
-                await appDbContext.SaveChangesAsync();
-            }
+            await appDbContext.SaveChangesAsync();
         }
     }
 }
