@@ -9,7 +9,6 @@ namespace TravelAgent.Data.Entities
     public class Hotel
     {
         public int Id { get; set; }
-        public Travel Travel { get; set; }
         [Required]
         public string Title { get; set; }
         public string Address { get; set; }

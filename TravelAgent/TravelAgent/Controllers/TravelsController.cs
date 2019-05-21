@@ -18,12 +18,14 @@ namespace TravelAgent.Controllers
         private readonly ITravelRepository _travelRepository;
         private readonly IOfficeRepository _officeRepository;
         private readonly IEmployeeRepository _employeeRepository;
+        private readonly IHotelRepository _hotelRepository;
 
-        public TravelsController(ITravelRepository travelRepository, IOfficeRepository officeRepository, IEmployeeRepository employeeRepository)
+        public TravelsController(ITravelRepository travelRepository, IOfficeRepository officeRepository, IEmployeeRepository employeeRepository, IHotelRepository hotelRepository)
         {
             _travelRepository = travelRepository;
             _officeRepository = officeRepository;
             _employeeRepository = employeeRepository;
+            _hotelRepository = hotelRepository;
         }
 
         [HttpGet]
@@ -45,7 +47,10 @@ namespace TravelAgent.Controllers
         public async Task<ActionResult<Travel>> CreateTravel([FromBody]CreateTravelRequest request)
         {
             try
-            {
+            {/*
+                foreach (Hotel hotel in request.Hotels) {
+                    await _hotelRepository.Create(hotel);
+                }*/
                 var travel = new Travel
                 {
                     Name = request.Name,
@@ -53,6 +58,8 @@ namespace TravelAgent.Controllers
                     TravelFrom = await _officeRepository.FindById(request.TravelToId),
                     StartTime = request.StartTime,
                     EndTime = request.EndTime,
+                    Hotels = request.Hotels,
+                    Transports = request.Transports,
                     Cost = request.Cost,
                     OrganizedBy = await _employeeRepository.FindById(request.OrganizedById)
                 };
