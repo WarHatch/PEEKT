@@ -51,7 +51,6 @@ namespace TravelAgent.Data.Repositories
 
             var hotel = appDbContext.Hotels.Single(x => x.Id == entity.Id);
 
-            hotel.Travel = entity.Travel;
             hotel.Title = entity.Title;
             hotel.Address = entity.Address;
 
