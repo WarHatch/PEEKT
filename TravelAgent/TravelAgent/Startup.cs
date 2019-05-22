@@ -92,6 +92,7 @@ namespace TravelAgent
                 // If the LoginPath isn't set, ASP.NET Core defaults 
                 // the path to /Account/Login.
                 options.LoginPath = "/Account/Login";
+                options.LogoutPath = "/Account/Logout";
                 // If the AccessDeniedPath isn't set, ASP.NET Core defaults 
                 // the path to /Account/AccessDenied.
                 options.AccessDeniedPath = "/Account/AccessDenied";
@@ -104,6 +105,19 @@ namespace TravelAgent
                     {
                         context.Response.Clear();
                         context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                        return Task.FromResult<object>(null);
+                    }
+                    context.Response.Redirect(context.RedirectUri);
+                    return Task.FromResult<object>(null);
+                };
+
+                options.Events.OnRedirectToLogout = context =>
+                {
+                    if (context.Request.Path.StartsWithSegments("/api")
+                        && context.Response.StatusCode == StatusCodes.Status200OK)
+                    {
+                        context.Response.Clear();
+                        context.Response.StatusCode = StatusCodes.Status403Forbidden;
                         return Task.FromResult<object>(null);
                     }
                     context.Response.Redirect(context.RedirectUri);
@@ -142,6 +156,9 @@ namespace TravelAgent
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
+
+            app.UseAuthentication();
+            app.UseCors("authPolicy");
 
             app.UseSwagger();
 
