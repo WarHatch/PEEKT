@@ -27,10 +27,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="DataContract\Responses\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="Controllers\AccountsController.cs" />
   </ItemGroup>
 

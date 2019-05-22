@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -6,10 +8,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using TravelAgent.Data.Entities;
 using TravelAgent.DataContract.Requests;
+using TravelAgent.DataContract.Responses;
 
 namespace TravelAgent.ClientApp
 {
     [ApiController]
+    [EnableCors("authPolicy")]
     [Route("api/[controller]")]
     public class AccountsController : ControllerBase
     {
@@ -54,6 +58,31 @@ namespace TravelAgent.ClientApp
             }
 
             return Ok(DateTime.Now);
+        }
+
+        [HttpGet("me")]
+        [Authorize]
+        public async Task<IActionResult> GetMe()
+        {
+            var userName = User.Identity.Name;
+            var identityUser = await _userManager.FindByNameAsync(userName);
+            //userManager.Users.SingleAsync(user => user.UserName == userName);
+
+            var userData = new UserResponse
+            {
+                Email = identityUser.Email
+            };
+
+            return Ok(userData);
+        }
+
+        [Authorize]
+        [HttpPost("logout")]
+        public async Task<IActionResult> SignOut()
+        {
+            await _signInManager.SignOutAsync();
+
+            return Ok();
         }
 
     }
