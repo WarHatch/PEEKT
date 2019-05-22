@@ -23,5 +23,8 @@ namespace TravelAgent.DataContract.Requests
         public decimal Cost { get; set; }
         [Required]
         public int OrganizedById { get; set; }
+
+        public List<Hotel> Hotels { get; set; }
+        public List<Transport> Transports { get; set; }
     }
 }

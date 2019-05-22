@@ -22,7 +22,7 @@ namespace TravelAgent.Data.Repositories
         {
 
 
-            return await appDbContext.Travels.ToArrayAsync();
+            return await appDbContext.Travels.Include(x => x.OrganizedBy).Include(x => x.TravelTo).Include(x => x.TravelFrom).Include(x => x.Hotels).Include(x => x.Transports).ToArrayAsync();
 
         }
 
@@ -44,8 +44,15 @@ namespace TravelAgent.Data.Repositories
         }
 
         public async Task<Travel> FindById(int id)
-        {
-            return await appDbContext.Travels.SingleAsync(x => x.Id == id);
+        {            
+            try
+            {
+                return await appDbContext.Travels.Include(x => x.OrganizedBy).Include(x => x.TravelTo).Include(x => x.TravelFrom).Include(x => x.Hotels).Include(x => x.Transports).SingleAsync(x => x.Id == id);
+            }
+            catch (InvalidOperationException)
+            {
+                throw new ArgumentException("There isn't any travels with this id");
+            }
         }
 
         public async Task Update(Travel entity)
@@ -56,8 +63,8 @@ namespace TravelAgent.Data.Repositories
             travel.Name = entity.Name;
             travel.TravelTo = entity.TravelTo;
             travel.TravelFrom = entity.TravelFrom;
-            travel.OrganizedBy = entity.OrganizedBy;
             travel.StartTime = entity.StartTime;
+            travel.EndTime = entity.EndTime;
             travel.Cost = entity.Cost;
             travel.OrganizedBy = entity.OrganizedBy;
 

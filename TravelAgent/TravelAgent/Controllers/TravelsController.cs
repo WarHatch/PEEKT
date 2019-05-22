@@ -18,12 +18,16 @@ namespace TravelAgent.Controllers
         private readonly ITravelRepository _travelRepository;
         private readonly IOfficeRepository _officeRepository;
         private readonly IEmployeeRepository _employeeRepository;
+        private readonly IHotelRepository _hotelRepository;
+        private readonly ITransportRepository _transportRepository;
 
-        public TravelsController(ITravelRepository travelRepository, IOfficeRepository officeRepository, IEmployeeRepository employeeRepository)
+        public TravelsController(ITravelRepository travelRepository, IOfficeRepository officeRepository, IEmployeeRepository employeeRepository, IHotelRepository hotelRepository, ITransportRepository transportRepository)
         {
             _travelRepository = travelRepository;
             _officeRepository = officeRepository;
             _employeeRepository = employeeRepository;
+            _hotelRepository = hotelRepository;
+            _transportRepository = transportRepository;
         }
 
         [HttpGet]
@@ -46,25 +50,124 @@ namespace TravelAgent.Controllers
         {
             try
             {
-                DateTime date1 = new DateTime(2019, 5, 1, 8, 30, 52);
+                /*
+                if (request.Hotels != null)
+                    foreach (Hotel hotel in request.Hotels)
+                    {
+                        await _hotelRepository.Create(hotel);
+                    }
+                if (request.Transports != null)
+                    foreach (Transport transport in request.Transports)
+                    {
+                        await _transportRepository.Create(transport);
+                    }
 
+                */
                 var travel = new Travel
                 {
                     Name = request.Name,
                     TravelTo = await _officeRepository.FindById(request.TravelToId),
-                    TravelFrom = await _officeRepository.FindById(request.TravelToId),
+                    TravelFrom = await _officeRepository.FindById(request.TravelFromId),
                     StartTime = request.StartTime,
                     EndTime = request.EndTime,
+                    Hotels = request.Hotels,
+                    Transports = request.Transports,
                     Cost = request.Cost,
                     OrganizedBy = await _employeeRepository.FindById(request.OrganizedById)
                 };
+
+
                 return Ok(await _travelRepository.Create(travel));
             }
-            catch (ArgumentException)
+            catch (ArgumentException e)
             {
-                return Conflict();
+                return Conflict(e.Message);
             }
         }
 
+        [HttpPut("{id}")]
+        public async Task<ActionResult<Travel>> UpdateTravel(int id, [FromBody]UpdateTravelRequest request)
+        {
+            try
+            {
+                var travel = await _travelRepository.FindById(id);
+                if (request.Name != null)
+                {
+                    travel.Name = request.Name;
+                }
+                if (request.TravelToId != 0)
+                {
+                    travel.TravelTo = await _officeRepository.FindById(request.TravelToId);
+                }
+                if (request.TravelFromId != 0)
+                {
+                    travel.TravelFrom = await _officeRepository.FindById(request.TravelFromId);
+                }
+                if (request.StartTime != null)
+                {
+                    travel.StartTime = request.StartTime;
+                }
+                if (request.EndTime != null)
+                {
+                    travel.EndTime = request.EndTime;
+                }
+                if (request.Cost <= 0)
+                {
+                    travel.Cost = request.Cost;
+                }
+                if (request.OrganizedById != 0)
+                {
+                    travel.OrganizedBy = await _employeeRepository.FindById(request.OrganizedById);
+                }
+                if (request.Hotels != null)
+                {
+                    travel.Hotels = request.Hotels;
+                }
+                if (request.Transports != null)
+                {
+                    travel.Transports = request.Transports;
+                }
+
+                await _travelRepository.Update(travel);
+                return Ok();
+            }
+            catch (ArgumentException e)
+            {
+                return Conflict(e.Message);
+            }
+            catch (InvalidOperationException)
+            {
+                return NotFound();
+            }
+        }
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteTask(int id)
+        {
+            try
+            {
+                
+                //Travel travel = await _travelRepository.FindById(id);
+                /*if (travel.Hotels != null)
+                    foreach (Hotel hotel in travel.Hotels)
+                    {
+                        await _hotelRepository.Delete(hotel);
+                    }
+                if (travel.Transports != null)
+                    foreach (Transport transport in travel.Transports)
+                    {
+                        await _transportRepository.Delete(transport);
+                    }*/
+                await _travelRepository.Delete(await _travelRepository.FindById(id));
+                return Ok();
+            }
+            catch (ArgumentException e)
+            {
+                return Conflict(e.Message);
+            }
+            catch (InvalidOperationException)
+            {
+                return NotFound();
+            }
+        }
     }
 }

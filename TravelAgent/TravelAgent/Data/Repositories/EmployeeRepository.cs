@@ -53,20 +53,27 @@ namespace TravelAgent.Data.Repositories
 
         public async Task<Employee> FindById(int id)
         {
-            return await appDbContext.Employees.Select(item => new Employee
+            try
             {
-                // čia kuriu naują, dėl security, kad hashinto password nepaimtų.
-                Id = item.Id,
-                UserName = item.UserName,
-                Email = item.Email,
-                FirstName = item.FirstName,
-                LastName = item.LastName,
-                ProfilePhoto = item.ProfilePhoto,
-                RegisteredOffice = item.RegisteredOffice,
-                Available = item.Available
+                return await appDbContext.Employees.Select(item => new Employee
+                {
+                    Id = item.Id,
+                    UserName = item.UserName,
+                    Email = item.Email,
+                    FirstName = item.FirstName,
+                    LastName = item.LastName,
+                    ProfilePhoto = item.ProfilePhoto,
+                    RegisteredOffice = item.RegisteredOffice,
+                    Available = item.Available
 
-            })
+                })
             .SingleAsync(task => task.Id == id);
+            }
+            catch (InvalidOperationException)
+            {
+                throw new ArgumentException("There isn't any employee with this id");
+            }
+
 
         }
 

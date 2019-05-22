@@ -36,9 +36,14 @@ namespace TravelAgent.Data.Repositories
 
         public async Task<Transport> FindById(int id)
         {
-
-            return await appDbContext.Transports.SingleAsync(x => x.Id == id);
-
+            try
+            {
+                return await appDbContext.Transports.SingleAsync(x => x.Id == id);
+            }
+            catch (InvalidOperationException)
+            {
+                throw new ArgumentException("There isn't any transport with this id");
+            }
         }
 
         public async Task<IEnumerable<Transport>> GetAll()
