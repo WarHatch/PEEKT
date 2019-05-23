@@ -19,6 +19,7 @@ namespace TravelAgent.Data.Repositories
 
         public async Task<EmployeeTravel> Create(EmployeeTravel entity)
         {
+            appDbContext.Entry(entity.Employee).State = EntityState.Unchanged;
             appDbContext.EmployeeTravel.Add(entity);
             await appDbContext.SaveChangesAsync();
 
@@ -51,7 +52,7 @@ namespace TravelAgent.Data.Repositories
         {   
             try
             {
-                return await appDbContext.EmployeeTravel.SingleAsync(x => x.Id == id);
+                return await appDbContext.EmployeeTravel.Include(x => x.Employee).Include(x => x.Travel).SingleAsync(x => x.Id == id);
             }
             catch (InvalidOperationException)
             {

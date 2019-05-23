@@ -16,11 +16,13 @@ namespace TravelAgent.Controllers
     {
         private readonly IApartmentRepository _apartmentRepository;
         private readonly IEmployeeRepository _employeeRepository;
+        private readonly IEmployeeTravelRepository _employeeTravelRepository;
 
-        public ApartmentsController(IApartmentRepository apartmentRepository, IEmployeeRepository employeeRepository)
+        public ApartmentsController(IApartmentRepository apartmentRepository, IEmployeeRepository employeeRepository, IEmployeeTravelRepository employeeTravelRepository)
         {
             _apartmentRepository = apartmentRepository;
             _employeeRepository = employeeRepository;
+            _employeeTravelRepository = employeeTravelRepository;
         }
 
         [HttpGet]
@@ -35,6 +37,8 @@ namespace TravelAgent.Controllers
             return Ok(await _apartmentRepository.FindById(id));
         }
 
+
+
         [HttpPost]
         public async Task<ActionResult<Apartment>> CreateApartment([FromBody]CreateApartmentRequest request)
         {
@@ -44,7 +48,9 @@ namespace TravelAgent.Controllers
                 {
                     Title = request.Title,
                     Address = request.Address,
-                    FitsPeople = request.FitsPeople
+                    FitsPeople = request.FitsPeople,
+                    EmployeeTravels = new List<EmployeeTravel>()
+                    
                 };
                 return Ok(await _apartmentRepository.Create(apartment));
             }
@@ -53,8 +59,6 @@ namespace TravelAgent.Controllers
                 return Conflict();
             }
         }
-
-
 
         [HttpPut("{id}")]
         public async Task<ActionResult<Apartment>> UpdateApartment(int id, [FromBody]CreateApartmentRequest request)
@@ -107,6 +111,22 @@ namespace TravelAgent.Controllers
             catch (DbUpdateException e)
             {
                 return Conflict(e.Message);
+            }
+        }
+
+        [HttpPost("AddGuest/{id}")]
+        public async Task<ActionResult<Apartment>> AddGuests(int id, [FromBody]AddGuestRequest request)
+        {
+            try
+            {
+                var apartment = await _apartmentRepository.FindById(id);
+                var employeeTravel = await _employeeTravelRepository.FindById(request.EmployeeTravelId);
+
+                return Ok(await _apartmentRepository.AddGuest(apartment, employeeTravel));
+            }
+            catch (ArgumentException)
+            {
+                return Conflict();
             }
         }
     }
