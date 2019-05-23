@@ -116,7 +116,7 @@ namespace TravelAgent.Controllers
                 }
 
                 await _travelRepository.Update(travel);
-                return Ok();
+                return Ok(await _travelRepository.FindById(id));
             }
             catch (ArgumentException e)
             {

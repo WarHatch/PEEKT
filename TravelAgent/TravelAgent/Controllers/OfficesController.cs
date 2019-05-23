@@ -54,7 +54,7 @@ namespace TravelAgent.Controllers
             }
         }
         [HttpPut("{id}")]
-        public async Task<ActionResult<Travel>> UpdateTravel(int id, [FromBody]UpdateOfficeRequest request)
+        public async Task<ActionResult<Office>> UpdateTravel(int id, [FromBody]UpdateOfficeRequest request)
         {
             try
             {
@@ -74,7 +74,7 @@ namespace TravelAgent.Controllers
                 }
 
                await _officeRepository.Update(office);
-                return Ok();
+                return Ok(await _officeRepository.FindById(id));
             }
             catch (ArgumentException e)
             {

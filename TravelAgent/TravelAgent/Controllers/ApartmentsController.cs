@@ -44,6 +44,42 @@ namespace TravelAgent.Controllers
                 return Conflict();
             }
         }
+        [HttpPut("{id}")]
+        public async Task<ActionResult<Apartment>> UpdateApartment(int id, [FromBody]Apartment request)
+        {
+            try
+            {
+                var apartment = await _apartmentRepository.FindById(id);
+
+                if (request.Title != null)
+                {
+                    apartment.Title = request.Title;
+                }
+                if (request.Address != null)
+                {
+                    apartment.Address = request.Address;
+                }
+                if (request.FitsPeople >= 0)
+                {
+                    apartment.FitsPeople = request.FitsPeople;
+                }
+                if (request.EmployeeTravels != null)
+                {
+                    apartment.EmployeeTravels = request.EmployeeTravels;
+                }
+
+                await _apartmentRepository.Update(apartment);
+                return Ok(await _apartmentRepository.FindById(id));
+            }
+            catch (ArgumentException e)
+            {
+                return Conflict(e.Message);
+            }
+            catch (InvalidOperationException)
+            {
+                return NotFound();
+            }
+        }
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteApartment(int id)
         {
