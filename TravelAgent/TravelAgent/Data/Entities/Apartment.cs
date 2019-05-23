@@ -11,5 +11,6 @@ namespace TravelAgent.Data.Entities
         public string Title { get; set; }
         public string Address { get; set; }
         public int FitsPeople { get; set; }
+        public List<EmployeeTravel> EmployeeTravels { get; set; }
     }
 }
