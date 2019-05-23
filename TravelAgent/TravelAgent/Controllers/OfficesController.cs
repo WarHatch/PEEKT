@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -50,6 +51,29 @@ namespace TravelAgent.Controllers
             catch (ArgumentException)
             {
                 return Conflict();
+            }
+        }
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteOffice(int id)
+        {
+            try
+            {
+                var office = await _officeRepository.FindById(id);
+                //await _apartmentRepository.Delete(office.OfficeApartment);
+                await _officeRepository.Delete(office);
+                return Ok();
+            }
+            catch (ArgumentException e)
+            {
+                return Conflict(e.Message);
+            }
+            catch (InvalidOperationException)
+            {
+                return NotFound();
+            }
+            catch (DbUpdateException e)
+            {
+                return Conflict(e.Message);
             }
         }
     }

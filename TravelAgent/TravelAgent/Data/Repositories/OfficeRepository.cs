@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using TravelAgent.Data.Entities;
@@ -33,11 +34,16 @@ namespace TravelAgent.Data.Repositories
 
         public async Task Delete(Office entity)
         {
+            try { 
+                var office = appDbContext.Offices.Single(x => x.Id == entity.Id);
+                appDbContext.Offices.Remove(office);
 
-            var office = appDbContext.Offices.Single(x => x.Id == entity.Id);
-            appDbContext.Offices.Remove(office);
-
-            await appDbContext.SaveChangesAsync();
+                await appDbContext.SaveChangesAsync();
+            }
+            catch(DbUpdateException ex)
+            {
+                throw new DbUpdateException("Can't delete Office, cause it has Employees!", ex);
+            }
 
         }
 
@@ -47,7 +53,6 @@ namespace TravelAgent.Data.Repositories
             try
             {
                 Office office = await appDbContext.Offices.SingleAsync(x => x.Id == id);
-                Console.WriteLine(office.OfficeApartment.Id);
                 return await appDbContext.Offices.Include(x => x.OfficeApartment).SingleAsync(x => x.Id == id);
             }
             catch (InvalidOperationException)

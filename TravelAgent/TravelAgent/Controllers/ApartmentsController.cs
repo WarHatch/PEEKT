@@ -10,11 +10,11 @@ namespace TravelAgent.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class ApartamentsController : ControllerBase
+    public class ApartmentsController : ControllerBase
     {
         private readonly IApartmentRepository _apartmentRepository;
 
-        public ApartamentsController(IApartmentRepository apartmentRepository)
+        public ApartmentsController(IApartmentRepository apartmentRepository)
         {
             _apartmentRepository = apartmentRepository;
         }
@@ -41,6 +41,23 @@ namespace TravelAgent.Controllers
             catch (ArgumentException)
             {
                 return Conflict();
+            }
+        }
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteApartment(int id)
+        {
+            try
+            {
+                await _apartmentRepository.Delete(await _apartmentRepository.FindById(id));
+                return Ok();
+            }
+            catch (ArgumentException e)
+            {
+                return Conflict(e.Message);
+            }
+            catch (InvalidOperationException)
+            {
+                return NotFound();
             }
         }
     }

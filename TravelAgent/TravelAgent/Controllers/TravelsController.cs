@@ -128,7 +128,7 @@ namespace TravelAgent.Controllers
             }
         }
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTask(int id)
+        public async Task<IActionResult> DeleteTravel(int id)
         {
             try
             {         
