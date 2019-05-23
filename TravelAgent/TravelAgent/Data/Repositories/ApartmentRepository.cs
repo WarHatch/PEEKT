@@ -28,12 +28,18 @@ namespace TravelAgent.Data.Repositories
 
         public async Task Delete(Apartment entity)
         {
+            try
+            {
+                var apartment = appDbContext.Apartments.Single(x => x.Id == entity.Id);
+                appDbContext.Apartments.Remove(apartment);
 
-            var apartment = appDbContext.Apartments.Single(x => x.Id == entity.Id);
-            appDbContext.Apartments.Remove(apartment);
+                await appDbContext.SaveChangesAsync();
 
-            await appDbContext.SaveChangesAsync();
-
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new DbUpdateException("Can't delete Apartment, cause it has Guest!", ex);
+            }
         }
 
         public async Task<Apartment> FindById(int id)
