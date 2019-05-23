@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TravelAgent.Data.Entities;
 using TravelAgent.Data.Repositories.Interfaces;
+using TravelAgent.DataContract.Requests;
 
 namespace TravelAgent.Controllers
 {
@@ -13,10 +14,16 @@ namespace TravelAgent.Controllers
     public class EmployeeTravelController : ControllerBase
     {
         private readonly IEmployeeTravelRepository _employeeTravelRepository;
+        private readonly IEmployeeRepository _employeeRepository;
+        private readonly ITravelRepository _travelRepository;
+        private readonly IApartmentRepository _apartmentRepository;
 
-        public EmployeeTravelController(IEmployeeTravelRepository employeeTravelRepository)
+        public EmployeeTravelController(IEmployeeTravelRepository employeeTravelRepository, IEmployeeRepository employeeRepository, ITravelRepository travelRepository, IApartmentRepository apartmentRepository)
         {
             _employeeTravelRepository = employeeTravelRepository;
+            _employeeRepository = employeeRepository;
+            _travelRepository = travelRepository;
+            _apartmentRepository = apartmentRepository;
         }
 
         [HttpGet]
@@ -35,6 +42,30 @@ namespace TravelAgent.Controllers
         public async Task<ActionResult<Employee>> GetByEmployeeId(int id)
         {
             return Ok(await _employeeTravelRepository.FindByEmployeeId(id));
+        }
+        [HttpPost]
+        [ProducesResponseType(201)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(409)]
+        public async Task<ActionResult<Travel>> CreateEmployeeTravel([FromBody]CreateEmployeeTravelRequest request)
+        {
+            try
+            {
+                var employeeTravel = new EmployeeTravel
+                {
+                    Employee = await _employeeRepository.FindById(request.EmployeeId),
+                    Travel = await _travelRepository.FindById(request.TravelId),
+                    Apartment = await _apartmentRepository.FindById(request.ApartmentId),
+                    Confirm = request.Confirm,
+
+                };
+
+                return Ok(await _employeeTravelRepository.Create(employeeTravel));
+            }
+            catch (ArgumentException e)
+            {
+                return Conflict(e.Message);
+            }
         }
     }
 }

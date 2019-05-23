@@ -50,19 +50,6 @@ namespace TravelAgent.Controllers
         {
             try
             {
-                /*
-                if (request.Hotels != null)
-                    foreach (Hotel hotel in request.Hotels)
-                    {
-                        await _hotelRepository.Create(hotel);
-                    }
-                if (request.Transports != null)
-                    foreach (Transport transport in request.Transports)
-                    {
-                        await _transportRepository.Create(transport);
-                    }
-
-                */
                 var travel = new Travel
                 {
                     Name = request.Name,
