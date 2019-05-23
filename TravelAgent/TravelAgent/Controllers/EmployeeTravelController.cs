@@ -55,7 +55,6 @@ namespace TravelAgent.Controllers
                 {
                     Employee = await _employeeRepository.FindById(request.EmployeeId),
                     Travel = await _travelRepository.FindById(request.TravelId),
-                    Apartment = await _apartmentRepository.FindById(request.ApartmentId),
                     Confirm = request.Confirm,
 
                 };

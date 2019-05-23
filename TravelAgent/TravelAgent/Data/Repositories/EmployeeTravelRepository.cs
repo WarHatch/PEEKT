@@ -70,7 +70,6 @@ namespace TravelAgent.Data.Repositories
             var traveler = appDbContext.EmployeeTravel.Single(x => x.Id == entity.Id);
 
             traveler.Travel = entity.Travel;
-            traveler.Apartment = entity.Apartment;
             traveler.Confirm = entity.Confirm;
 
             await appDbContext.SaveChangesAsync();
