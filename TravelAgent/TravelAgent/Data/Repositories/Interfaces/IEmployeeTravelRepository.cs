@@ -8,5 +8,6 @@ namespace TravelAgent.Data.Repositories.Interfaces
 {
     public interface IEmployeeTravelRepository : IRepository<EmployeeTravel>
     {
+        Task<IEnumerable<EmployeeTravel>> FindByEmployeeId(int id);
     }
 }

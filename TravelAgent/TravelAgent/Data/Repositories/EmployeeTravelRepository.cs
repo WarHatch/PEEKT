@@ -35,6 +35,18 @@ namespace TravelAgent.Data.Repositories
 
         }
 
+        public async Task<IEnumerable<EmployeeTravel>> FindByEmployeeId(int id)
+        {
+            try
+            {
+                return await appDbContext.EmployeeTravel.Where(x => x.Employee.Id == id).ToArrayAsync(); 
+            }
+            catch (InvalidOperationException)
+            {
+                throw new ArgumentException("There isn't any employeeTravel with this id");
+            }
+        }
+
         public async Task<EmployeeTravel> FindById(int id)
         {   
             try
@@ -43,7 +55,7 @@ namespace TravelAgent.Data.Repositories
             }
             catch (InvalidOperationException)
             {
-                throw new ArgumentException("There isn't any employeeTravel with this id");
+                throw new ArgumentException("There isn't any employeeTravel for Employee with this id");
             }
         }
 

@@ -30,5 +30,11 @@ namespace TravelAgent.Controllers
         {
             return Ok(await _employeeTravelRepository.FindById(id));
         }
+
+        [HttpGet("Employee/{id}")]
+        public async Task<ActionResult<Employee>> GetByEmployeeId(int id)
+        {
+            return Ok(await _employeeTravelRepository.FindByEmployeeId(id));
+        }
     }
 }
