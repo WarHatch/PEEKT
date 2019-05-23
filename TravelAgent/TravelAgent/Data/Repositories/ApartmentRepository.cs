@@ -16,6 +16,7 @@ namespace TravelAgent.Data.Repositories
         {
             appDbContext = context;
         }
+
         public async Task<Apartment> Create(Apartment entity)
         {
 
@@ -71,6 +72,25 @@ namespace TravelAgent.Data.Repositories
 
             await appDbContext.SaveChangesAsync();
 
+        }
+        public async Task<Apartment> AddGuest(Apartment entity, EmployeeTravel employeeTravel)
+        {
+            var apartment = appDbContext.Apartments.Single(x => x.Id == entity.Id);
+
+            apartment.EmployeeTravels.Add(employeeTravel);
+            await appDbContext.SaveChangesAsync();
+
+            return entity;
+        }
+
+        public async Task<Apartment> RemoveGuest(Apartment entity, EmployeeTravel employeeTravel)
+        {
+            var apartment = appDbContext.Apartments.Single(x => x.Id == entity.Id);
+
+            apartment.EmployeeTravels.Remove(employeeTravel);
+            await appDbContext.SaveChangesAsync();
+
+            return apartment;
         }
     }
 }

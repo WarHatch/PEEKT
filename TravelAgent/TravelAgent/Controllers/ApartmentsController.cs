@@ -53,6 +53,9 @@ namespace TravelAgent.Controllers
                 return Conflict();
             }
         }
+
+
+
         [HttpPut("{id}")]
         public async Task<ActionResult<Apartment>> UpdateApartment(int id, [FromBody]CreateApartmentRequest request)
         {
