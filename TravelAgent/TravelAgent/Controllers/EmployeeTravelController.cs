@@ -66,5 +66,22 @@ namespace TravelAgent.Controllers
                 return Conflict(e.Message);
             }
         }
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteTask(int id)
+        {
+            try
+            {
+                await _employeeTravelRepository.Delete(await _employeeTravelRepository.FindById(id));
+                return Ok();
+            }
+            catch (ArgumentException e)
+            {
+                return Conflict(e.Message);
+            }
+            catch (InvalidOperationException)
+            {
+                return NotFound();
+            }
+        }
     }
 }

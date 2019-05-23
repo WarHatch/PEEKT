@@ -131,19 +131,7 @@ namespace TravelAgent.Controllers
         public async Task<IActionResult> DeleteTask(int id)
         {
             try
-            {
-                
-                //Travel travel = await _travelRepository.FindById(id);
-                /*if (travel.Hotels != null)
-                    foreach (Hotel hotel in travel.Hotels)
-                    {
-                        await _hotelRepository.Delete(hotel);
-                    }
-                if (travel.Transports != null)
-                    foreach (Transport transport in travel.Transports)
-                    {
-                        await _transportRepository.Delete(transport);
-                    }*/
+            {         
                 await _travelRepository.Delete(await _travelRepository.FindById(id));
                 return Ok();
             }
