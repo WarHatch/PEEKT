@@ -4,68 +4,89 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TravelAgent.Data.Entities;
+using TravelAgent.Data.Repositories.Interfaces;
 
 namespace TravelAgent.Data.Repositories
 {
-    public class ApartmentRepository : IRepository<Apartment>
+    public class ApartmentRepository : IApartmentRepository
     {
-        private readonly Func<AppDbContext> appDbContextFunc;
+        private readonly AppDbContext appDbContext;
 
-        public ApartmentRepository(Func<AppDbContext> contextFunc)
+        public ApartmentRepository(AppDbContext context)
         {
-            appDbContextFunc = contextFunc;
+            appDbContext = context;
         }
+
         public async Task<Apartment> Create(Apartment entity)
         {
-            using (var appDbContext = appDbContextFunc())
-            {
 
-                appDbContext.Apartments.Add(entity);
-                await appDbContext.SaveChangesAsync();
+            appDbContext.Apartments.Add(entity);
+            await appDbContext.SaveChangesAsync();
 
-                return entity;
-            }
+            return entity;
+
         }
 
         public async Task Delete(Apartment entity)
         {
-            using (var appDbContext = appDbContextFunc())
+            try
             {
                 var apartment = appDbContext.Apartments.Single(x => x.Id == entity.Id);
                 appDbContext.Apartments.Remove(apartment);
 
                 await appDbContext.SaveChangesAsync();
+
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new DbUpdateException("Can't delete Apartment, cause it has Guest!", ex);
             }
         }
 
         public async Task<Apartment> FindById(int id)
         {
-            using (var appDbContext = appDbContextFunc())
+            try
             {
-                return await appDbContext.Apartments.SingleAsync(x => x.Id == id);
+                return await appDbContext.Apartments.Include(x => x.EmployeeTravels).SingleAsync(x => x.Id == id);
             }
+            catch (InvalidOperationException)
+            {
+                throw new ArgumentException("There isn't any apartment with this id");
+            }
+
         }
 
         public async Task<IEnumerable<Apartment>> GetAll()
         {
-            using (var appDbContext = appDbContextFunc())
-            {
-                return await appDbContext.Apartments.ToArrayAsync();
-            }
+            return await appDbContext.Apartments.ToArrayAsync();
         }
 
         public async Task Update(Apartment entity)
         {
-            using (var appDbContext = appDbContextFunc())
-            {
-                var apartment = appDbContext.Apartments.Single(x => x.Id == entity.Id);
 
-                apartment.Title = entity.Title;
-                apartment.Address = entity.Address;
-                apartment.FitsPeople = entity.FitsPeople;
+            var apartment = appDbContext.Apartments.Single(x => x.Id == entity.Id);
 
-                await appDbContext.SaveChangesAsync();
-            }
+            apartment.Title = entity.Title;
+            apartment.Address = entity.Address;
+            apartment.FitsPeople = entity.FitsPeople;
+
+            await appDbContext.SaveChangesAsync();
+
+        }
+        public async Task<Apartment> AddGuest(Apartment apartment, EmployeeTravel employeeTravel)
+        {
+            apartment.EmployeeTravels.Add(employeeTravel);
+            await appDbContext.SaveChangesAsync();
+
+            return apartment;
+        }
+
+        public async Task<Apartment> RemoveGuest(Apartment apartment, EmployeeTravel employeeTravel)
+        {
+            apartment.EmployeeTravels.Remove(employeeTravel);
+            await appDbContext.SaveChangesAsync();
+
+            return apartment;
         }
     }
 }

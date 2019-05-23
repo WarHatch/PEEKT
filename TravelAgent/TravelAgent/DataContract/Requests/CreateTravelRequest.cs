@@ -1,25 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
+using TravelAgent.Data.Entities;
 
-namespace TravelAgent.Data.Entities
+namespace TravelAgent.DataContract.Requests
 {
-    public class Travel
+    public class CreateTravelRequest
     {
-        public int Id { get; set; }
         [Required]
         public string Name { get; set; }
-        public Office TravelTo { get; set; }
-        public Office TravelFrom { get; set; }
+        [Required]
+        public int TravelToId { get; set; }
+        [Required]
+        public int TravelFromId { get; set; }
+        [Required]
         public DateTime StartTime { get; set; }
+        [Required]
         public DateTime EndTime { get; set; }
+        [Required]
+        public decimal Cost { get; set; }
+        [Required]
+        public int OrganizedById { get; set; }
+
         public List<Hotel> Hotels { get; set; }
         public List<Transport> Transports { get; set; }
-        [Column(TypeName = "decimal(18,2)")]
-        public decimal Cost { get; set; }
-        public Employee OrganizedBy { get; set; }
     }
 }

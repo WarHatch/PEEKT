@@ -4,69 +4,76 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TravelAgent.Data.Entities;
+using TravelAgent.Data.Repositories.Interfaces;
 
 namespace TravelAgent.Data.Repositories
 {
-    public class EmployeeTravelRepository : IRepository<EmployeeTravel>
+    public class EmployeeTravelRepository : IEmployeeTravelRepository
     {
-        private readonly Func<AppDbContext> appDbContextFunc;
+        private readonly AppDbContext appDbContext;
 
-        public EmployeeTravelRepository(Func<AppDbContext> contextFunc)
+        public EmployeeTravelRepository(AppDbContext context)
         {
-            appDbContextFunc = contextFunc;
+            appDbContext = context;
         }
 
         public async Task<EmployeeTravel> Create(EmployeeTravel entity)
         {
-            using (var appDbContext = appDbContextFunc())
-            {
+            appDbContext.Entry(entity.Employee).State = EntityState.Unchanged;
+            appDbContext.EmployeeTravel.Add(entity);
+            await appDbContext.SaveChangesAsync();
 
-                appDbContext.EmployeeTravel.Add(entity);
-                await appDbContext.SaveChangesAsync();
-
-                return entity;
-            }
+            return entity;
         }
 
         public async Task Delete(EmployeeTravel entity)
         {
-            using (var appDbContext = appDbContextFunc())
-            {
-                var traveler = appDbContext.EmployeeTravel.Single(x => x.Id == entity.Id);
-                appDbContext.EmployeeTravel.Remove(traveler);
 
-                await appDbContext.SaveChangesAsync();
+            var traveler = appDbContext.EmployeeTravel.Single(x => x.Id == entity.Id);
+            appDbContext.EmployeeTravel.Remove(traveler);
+
+            await appDbContext.SaveChangesAsync();
+
+        }
+
+        public async Task<IEnumerable<EmployeeTravel>> FindByEmployeeId(int id)
+        {
+            try
+            {
+                return await appDbContext.EmployeeTravel.Where(x => x.Employee.Id == id).ToArrayAsync(); 
+            }
+            catch (InvalidOperationException)
+            {
+                throw new ArgumentException("There isn't any employeeTravel with this id");
             }
         }
 
         public async Task<EmployeeTravel> FindById(int id)
-        {
-            using (var appDbContext = appDbContextFunc())
+        {   
+            try
             {
-                return await appDbContext.EmployeeTravel.SingleAsync(x => x.Id == id);
+                return await appDbContext.EmployeeTravel.Include(x => x.Employee).Include(x => x.Travel).SingleAsync(x => x.Id == id);
+            }
+            catch (InvalidOperationException)
+            {
+                throw new ArgumentException("There isn't any employeeTravel for Employee with this id");
             }
         }
 
         public async Task<IEnumerable<EmployeeTravel>> GetAll()
         {
-            using (var appDbContext = appDbContextFunc())
-            {
-                return await appDbContext.EmployeeTravel.ToArrayAsync();
-            }
+            return await appDbContext.EmployeeTravel.ToArrayAsync();
         }
 
         public async Task Update(EmployeeTravel entity)
         {
-            using (var appDbContext = appDbContextFunc())
-            {
-                var traveler = appDbContext.EmployeeTravel.Single(x => x.Id == entity.Id);
 
-                traveler.Travel = entity.Travel;
-                traveler.Apartment = entity.Apartment;
-                traveler.Confirm = entity.Confirm;
+            var traveler = appDbContext.EmployeeTravel.Single(x => x.Id == entity.Id);
 
-                await appDbContext.SaveChangesAsync();
-            }
+            traveler.Travel = entity.Travel;
+            traveler.Confirm = entity.Confirm;
+
+            await appDbContext.SaveChangesAsync();
         }
     }
 }

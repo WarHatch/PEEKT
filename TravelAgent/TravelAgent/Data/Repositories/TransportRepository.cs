@@ -4,67 +4,63 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TravelAgent.Data.Entities;
+using TravelAgent.Data.Repositories.Interfaces;
 
 namespace TravelAgent.Data.Repositories
 {
-    public class TransportRepository : IRepository<Transport>
+    public class TransportRepository : ITransportRepository
     {
-        private readonly Func<AppDbContext> appDbContextFunc;
+        private readonly AppDbContext appDbContext;
 
-        public TransportRepository(Func<AppDbContext> contextFunc)
+        public TransportRepository(AppDbContext context)
         {
-            appDbContextFunc = contextFunc;
+            appDbContext = context;
         }
         public async Task<Transport> Create(Transport entity)
         {
-            using (var appDbContext = appDbContextFunc())
-            {
 
-                appDbContext.Transports.Add(entity);
-                await appDbContext.SaveChangesAsync();
+            appDbContext.Transports.Add(entity);
+            await appDbContext.SaveChangesAsync();
 
-                return entity;
-            }
+            return entity;
         }
 
         public async Task Delete(Transport entity)
         {
-            using (var appDbContext = appDbContextFunc())
-            {
-                var transports = appDbContext.Transports.Single(x => x.Id == entity.Id);
-                appDbContext.Transports.Remove(transports);
 
-                await appDbContext.SaveChangesAsync();
-            }
+            var transports = appDbContext.Transports.Single(x => x.Id == entity.Id);
+            appDbContext.Transports.Remove(transports);
+
+            await appDbContext.SaveChangesAsync();
         }
 
         public async Task<Transport> FindById(int id)
         {
-            using (var appDbContext = appDbContextFunc())
+            try
             {
                 return await appDbContext.Transports.SingleAsync(x => x.Id == id);
+            }
+            catch (InvalidOperationException)
+            {
+                throw new ArgumentException("There isn't any transport with this id");
             }
         }
 
         public async Task<IEnumerable<Transport>> GetAll()
         {
-            using (var appDbContext = appDbContextFunc())
-            {
-                return await appDbContext.Transports.ToArrayAsync();
-            }
+            return await appDbContext.Transports.ToArrayAsync();
         }
 
         public async Task Update(Transport entity)
         {
-            using (var appDbContext = appDbContextFunc())
-            {
-                var transport = appDbContext.Transports.Single(x => x.Id == entity.Id);
 
-                transport.Description = entity.Description;
-                transport.TypeOfTransport = entity.TypeOfTransport;
+            var transport = appDbContext.Transports.Single(x => x.Id == entity.Id);
 
-                await appDbContext.SaveChangesAsync();
-            }
+            transport.Description = entity.Description;
+            transport.TypeOfTransport = entity.TypeOfTransport;
+
+            await appDbContext.SaveChangesAsync();
+
         }
     }
 }

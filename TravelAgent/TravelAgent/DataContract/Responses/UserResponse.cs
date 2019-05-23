@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace TravelAgent.DataContract.Enums
+namespace TravelAgent.DataContract.Responses
 {
-    public enum Vehicle
+    public class UserResponse
     {
-        Car,
-        Plane
+        public string Email { get; set; }
     }
 }

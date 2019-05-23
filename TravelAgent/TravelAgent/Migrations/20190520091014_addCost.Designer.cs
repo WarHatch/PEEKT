@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TravelAgent.Data;
 
 namespace TravelAgent.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190520091014_addCost")]
+    partial class addCost
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -216,8 +218,6 @@ namespace TravelAgent.Migrations
 
                     b.Property<string>("Address");
 
-                    b.Property<string>("Description");
-
                     b.Property<string>("Title")
                         .IsRequired();
 
@@ -283,13 +283,9 @@ namespace TravelAgent.Migrations
 
                     b.Property<string>("Description");
 
-                    b.Property<int?>("TravelId");
-
-                    b.Property<string>("TypeOfTransport");
+                    b.Property<int>("TypeOfTransport");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("TravelId");
 
                     b.ToTable("Transports");
                 });
@@ -396,8 +392,8 @@ namespace TravelAgent.Migrations
 
             modelBuilder.Entity("TravelAgent.Data.Entities.Hotel", b =>
                 {
-                    b.HasOne("TravelAgent.Data.Entities.Travel")
-                        .WithMany("Hotels")
+                    b.HasOne("TravelAgent.Data.Entities.Travel", "Travel")
+                        .WithMany()
                         .HasForeignKey("TravelId");
                 });
 
@@ -407,13 +403,6 @@ namespace TravelAgent.Migrations
                         .WithMany()
                         .HasForeignKey("OfficeApartmentId")
                         .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("TravelAgent.Data.Entities.Transport", b =>
-                {
-                    b.HasOne("TravelAgent.Data.Entities.Travel")
-                        .WithMany("Transports")
-                        .HasForeignKey("TravelId");
                 });
 
             modelBuilder.Entity("TravelAgent.Data.Entities.Travel", b =>

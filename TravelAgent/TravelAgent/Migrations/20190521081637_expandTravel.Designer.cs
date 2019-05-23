@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TravelAgent.Data;
 
 namespace TravelAgent.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190521081637_expandTravel")]
+    partial class expandTravel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -216,8 +218,6 @@ namespace TravelAgent.Migrations
 
                     b.Property<string>("Address");
 
-                    b.Property<string>("Description");
-
                     b.Property<string>("Title")
                         .IsRequired();
 
@@ -285,7 +285,7 @@ namespace TravelAgent.Migrations
 
                     b.Property<int?>("TravelId");
 
-                    b.Property<string>("TypeOfTransport");
+                    b.Property<int>("TypeOfTransport");
 
                     b.HasKey("Id");
 
@@ -396,7 +396,7 @@ namespace TravelAgent.Migrations
 
             modelBuilder.Entity("TravelAgent.Data.Entities.Hotel", b =>
                 {
-                    b.HasOne("TravelAgent.Data.Entities.Travel")
+                    b.HasOne("TravelAgent.Data.Entities.Travel", "Travel")
                         .WithMany("Hotels")
                         .HasForeignKey("TravelId");
                 });

@@ -9,11 +9,15 @@ using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Swashbuckle.AspNetCore.Swagger;
 using System;
+using System.IO;
+using System.Reflection;
 using System.Threading.Tasks;
 using TravelAgent.Data;
 using TravelAgent.Data.Entities;
 using TravelAgent.Data.Repositories;
+using TravelAgent.Data.Repositories.Interfaces;
 
 namespace TravelAgent
 {
@@ -31,16 +35,21 @@ namespace TravelAgent
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info { Title = "Travel Agent API", Version = "v1" });
+            });
+
             // Duombazë
             services.AddDbContext<AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("TodosConnection")));
 
-            services.AddScoped<IRepository<Apartment>, ApartmentRepository>();
-            services.AddScoped<IRepository<Employee>,EmployeeRepository>();
-            services.AddScoped<IRepository<EmployeeTravel>, EmployeeTravelRepository>();
-            services.AddScoped<IRepository<Hotel>, HotelRepository>();
-            services.AddScoped<IRepository<Office>, OfficeRepository>();
-            services.AddScoped<IRepository<Transport>, TransportRepository>();
-            services.AddScoped<IRepository<Travel>, TravelRepository>();    
+            services.AddScoped<IApartmentRepository, ApartmentRepository>();
+            services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+            services.AddScoped<IEmployeeTravelRepository, EmployeeTravelRepository>();
+            services.AddScoped<IHotelRepository, HotelRepository>();
+            services.AddScoped<IOfficeRepository, OfficeRepository>();
+            services.AddScoped<ITransportRepository, TransportRepository>();
+            services.AddScoped<ITravelRepository, TravelRepository>();    
 
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -83,6 +92,7 @@ namespace TravelAgent
                 // If the LoginPath isn't set, ASP.NET Core defaults 
                 // the path to /Account/Login.
                 options.LoginPath = "/Account/Login";
+                options.LogoutPath = "/Account/Logout";
                 // If the AccessDeniedPath isn't set, ASP.NET Core defaults 
                 // the path to /Account/AccessDenied.
                 options.AccessDeniedPath = "/Account/AccessDenied";
@@ -95,6 +105,19 @@ namespace TravelAgent
                     {
                         context.Response.Clear();
                         context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                        return Task.FromResult<object>(null);
+                    }
+                    context.Response.Redirect(context.RedirectUri);
+                    return Task.FromResult<object>(null);
+                };
+
+                options.Events.OnRedirectToLogout = context =>
+                {
+                    if (context.Request.Path.StartsWithSegments("/api")
+                        && context.Response.StatusCode == StatusCodes.Status200OK)
+                    {
+                        context.Response.Clear();
+                        context.Response.StatusCode = StatusCodes.Status403Forbidden;
                         return Task.FromResult<object>(null);
                     }
                     context.Response.Redirect(context.RedirectUri);
@@ -133,6 +156,16 @@ namespace TravelAgent
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
+
+            app.UseAuthentication();
+            app.UseCors("authPolicy");
+
+            app.UseSwagger();
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
+            });
 
             app.UseMvc(routes =>
             {
