@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TravelAgent.Data.Entities;
 using TravelAgent.Data.Repositories.Interfaces;
+using TravelAgent.DataContract.Requests;
 
 namespace TravelAgent.Controllers
 {
@@ -14,10 +15,12 @@ namespace TravelAgent.Controllers
     public class ApartmentsController : ControllerBase
     {
         private readonly IApartmentRepository _apartmentRepository;
+        private readonly IEmployeeRepository _employeeRepository;
 
-        public ApartmentsController(IApartmentRepository apartmentRepository)
+        public ApartmentsController(IApartmentRepository apartmentRepository, IEmployeeRepository employeeRepository)
         {
             _apartmentRepository = apartmentRepository;
+            _employeeRepository = employeeRepository;
         }
 
         [HttpGet]
@@ -33,11 +36,17 @@ namespace TravelAgent.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Apartment>> CreateApartment([FromBody]Apartment apartmentRequest)
+        public async Task<ActionResult<Apartment>> CreateApartment([FromBody]CreateApartmentRequest request)
         {
             try
             {
-                return Ok(await _apartmentRepository.Create(apartmentRequest));
+                var apartment = new Apartment
+                {
+                    Title = request.Title,
+                    Address = request.Address,
+                    FitsPeople = request.FitsPeople
+                };
+                return Ok(await _apartmentRepository.Create(apartment));
             }
             catch (ArgumentException)
             {
@@ -45,7 +54,7 @@ namespace TravelAgent.Controllers
             }
         }
         [HttpPut("{id}")]
-        public async Task<ActionResult<Apartment>> UpdateApartment(int id, [FromBody]Apartment request)
+        public async Task<ActionResult<Apartment>> UpdateApartment(int id, [FromBody]CreateApartmentRequest request)
         {
             try
             {
@@ -62,10 +71,6 @@ namespace TravelAgent.Controllers
                 if (request.FitsPeople >= 0)
                 {
                     apartment.FitsPeople = request.FitsPeople;
-                }
-                if (request.EmployeeTravels != null)
-                {
-                    apartment.EmployeeTravels = request.EmployeeTravels;
                 }
 
                 await _apartmentRepository.Update(apartment);
