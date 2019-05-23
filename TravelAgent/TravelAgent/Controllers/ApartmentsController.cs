@@ -115,7 +115,7 @@ namespace TravelAgent.Controllers
         }
 
         [HttpPost("AddGuest/{id}")]
-        public async Task<ActionResult<Apartment>> AddGuests(int id, [FromBody]AddGuestRequest request)
+        public async Task<ActionResult<Apartment>> AddGuest(int id, [FromBody]AddGuestRequest request)
         {
             try
             {
@@ -123,6 +123,22 @@ namespace TravelAgent.Controllers
                 var employeeTravel = await _employeeTravelRepository.FindById(request.EmployeeTravelId);
 
                 return Ok(await _apartmentRepository.AddGuest(apartment, employeeTravel));
+            }
+            catch (ArgumentException)
+            {
+                return Conflict();
+            }
+        }
+
+        [HttpPost("RemoveGuest/{id}")]
+        public async Task<ActionResult<Apartment>> RemoveGuest(int id, [FromBody]AddGuestRequest request)
+        {
+            try
+            {
+                var apartment = await _apartmentRepository.FindById(id);
+                var employeeTravel = await _employeeTravelRepository.FindById(request.EmployeeTravelId);
+
+                return Ok(await _apartmentRepository.RemoveGuest(apartment, employeeTravel));
             }
             catch (ArgumentException)
             {

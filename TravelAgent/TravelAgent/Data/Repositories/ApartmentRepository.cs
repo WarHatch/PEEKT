@@ -73,21 +73,16 @@ namespace TravelAgent.Data.Repositories
             await appDbContext.SaveChangesAsync();
 
         }
-        public async Task<Apartment> AddGuest(Apartment entity, EmployeeTravel employeeTravelEntity)
+        public async Task<Apartment> AddGuest(Apartment apartment, EmployeeTravel employeeTravel)
         {
-            var apartment = appDbContext.Apartments.Single(x => x.Id == entity.Id);
-            var employeeTravel = appDbContext.EmployeeTravel.Single(x => x.Id == employeeTravelEntity.Id);
-
             apartment.EmployeeTravels.Add(employeeTravel);
             await appDbContext.SaveChangesAsync();
 
-            return entity;
+            return apartment;
         }
 
-        public async Task<Apartment> RemoveGuest(Apartment entity, EmployeeTravel employeeTravel)
+        public async Task<Apartment> RemoveGuest(Apartment apartment, EmployeeTravel employeeTravel)
         {
-            var apartment = appDbContext.Apartments.Single(x => x.Id == entity.Id);
-
             apartment.EmployeeTravels.Remove(employeeTravel);
             await appDbContext.SaveChangesAsync();
 
