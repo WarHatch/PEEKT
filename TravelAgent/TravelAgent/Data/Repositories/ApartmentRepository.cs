@@ -16,6 +16,7 @@ namespace TravelAgent.Data.Repositories
         {
             appDbContext = context;
         }
+
         public async Task<Apartment> Create(Apartment entity)
         {
 
@@ -28,19 +29,25 @@ namespace TravelAgent.Data.Repositories
 
         public async Task Delete(Apartment entity)
         {
+            try
+            {
+                var apartment = appDbContext.Apartments.Single(x => x.Id == entity.Id);
+                appDbContext.Apartments.Remove(apartment);
 
-            var apartment = appDbContext.Apartments.Single(x => x.Id == entity.Id);
-            appDbContext.Apartments.Remove(apartment);
+                await appDbContext.SaveChangesAsync();
 
-            await appDbContext.SaveChangesAsync();
-
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new DbUpdateException("Can't delete Apartment, cause it has Guest!", ex);
+            }
         }
 
         public async Task<Apartment> FindById(int id)
         {
             try
             {
-                return await appDbContext.Apartments.SingleAsync(x => x.Id == id);
+                return await appDbContext.Apartments.Include(x => x.EmployeeTravels).SingleAsync(x => x.Id == id);
             }
             catch (InvalidOperationException)
             {
@@ -65,6 +72,21 @@ namespace TravelAgent.Data.Repositories
 
             await appDbContext.SaveChangesAsync();
 
+        }
+        public async Task<Apartment> AddGuest(Apartment apartment, EmployeeTravel employeeTravel)
+        {
+            apartment.EmployeeTravels.Add(employeeTravel);
+            await appDbContext.SaveChangesAsync();
+
+            return apartment;
+        }
+
+        public async Task<Apartment> RemoveGuest(Apartment apartment, EmployeeTravel employeeTravel)
+        {
+            apartment.EmployeeTravels.Remove(employeeTravel);
+            await appDbContext.SaveChangesAsync();
+
+            return apartment;
         }
     }
 }
