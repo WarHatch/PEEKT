@@ -9,5 +9,7 @@ namespace TravelAgent.Data.Repositories.Interfaces
 {
     public interface ITravelRepository : IRepository<Travel>
     {
+        Task<Travel> FindByIdWithOrganizedBy(int id);
+        
     }
 }

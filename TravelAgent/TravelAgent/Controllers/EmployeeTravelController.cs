@@ -54,7 +54,7 @@ namespace TravelAgent.Controllers
                 var employeeTravel = new EmployeeTravel
                 {
                     Employee = await _employeeRepository.FindById(request.EmployeeId),
-                    Travel = await _travelRepository.FindById(request.TravelId),
+                    Travel = await _travelRepository.FindByIdWithOrganizedBy(request.TravelId),
                     Confirm = request.Confirm,
 
                 };
