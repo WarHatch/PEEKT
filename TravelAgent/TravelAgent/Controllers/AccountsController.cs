@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TravelAgent.Data.Entities;
+using TravelAgent.Data.Repositories.Interfaces;
 using TravelAgent.DataContract.Requests;
 using TravelAgent.DataContract.Responses;
 
@@ -19,11 +20,13 @@ namespace TravelAgent.ClientApp
     {
         private readonly UserManager<Employee> _userManager;
         private readonly SignInManager<Employee> _signInManager;
+        private readonly IOfficeRepository _officeRepository;
 
-        public AccountsController(UserManager<Employee> userManager, SignInManager<Employee> signInManager)
+        public AccountsController(UserManager<Employee> userManager, SignInManager<Employee> signInManager, IOfficeRepository officeRepository)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _officeRepository = officeRepository;
         }
 
         [HttpPost("register")]
@@ -32,8 +35,20 @@ namespace TravelAgent.ClientApp
             var user = new Employee
             {
                 UserName = registerAccount.Email,
-                Email = registerAccount.Email
+                Email = registerAccount.Email,
+                FirstName = registerAccount.FirstName,
+                LastName = registerAccount.LastName,
             };
+            if(registerAccount.ProfilePhoto != null)
+            {
+                user.ProfilePhoto = registerAccount.ProfilePhoto;
+            }
+            if (registerAccount.RegisteredOfficeId != 0)
+            {
+                user.RegisteredOffice = await _officeRepository.FindById(registerAccount.RegisteredOfficeId);
+            }
+
+            
 
             var result = await _userManager.CreateAsync(user, registerAccount.Password);
 
@@ -66,7 +81,6 @@ namespace TravelAgent.ClientApp
         {
             var userName = User.Identity.Name;
             var identityUser = await _userManager.FindByNameAsync(userName);
-            //userManager.Users.SingleAsync(user => user.UserName == userName);
 
             var userData = new UserResponse
             {

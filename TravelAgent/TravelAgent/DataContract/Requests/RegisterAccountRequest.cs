@@ -18,5 +18,12 @@ namespace TravelAgent.DataContract.Requests
         [DataType(DataType.Password)]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+        [Required(AllowEmptyStrings = false)]
+        public string FirstName { get; set; }
+        [Required(AllowEmptyStrings = false)]
+        public string LastName { get; set; }
+        public string ProfilePhoto { get; set; }
+        public int RegisteredOfficeId { get; set; }
     }
 }
