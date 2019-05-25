@@ -20,12 +20,14 @@ namespace TravelAgent.ClientApp
     {
         private readonly UserManager<Employee> _userManager;
         private readonly SignInManager<Employee> _signInManager;
+        private readonly IEmployeeRepository _employeeRepository;
         private readonly IOfficeRepository _officeRepository;
 
-        public AccountsController(UserManager<Employee> userManager, SignInManager<Employee> signInManager, IOfficeRepository officeRepository)
+        public AccountsController(UserManager<Employee> userManager, SignInManager<Employee> signInManager, IEmployeeRepository employeeRepository, IOfficeRepository officeRepository)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _employeeRepository = employeeRepository;
             _officeRepository = officeRepository;
         }
 
@@ -84,10 +86,54 @@ namespace TravelAgent.ClientApp
 
             var userData = new UserResponse
             {
-                Email = identityUser.Email
+                Email = identityUser.Email,
+                FirstName = identityUser.FirstName,
+                LastName = identityUser.LastName,
+                ProfilePhoto = identityUser.ProfilePhoto,
+                RegisteredOffice = identityUser.RegisteredOffice
             };
 
             return Ok(userData);
+        }
+
+        [HttpPut("me")]
+        [Authorize]
+        public async Task<IActionResult> UpdateMe([FromBody]UpdateMeRequest request)
+        {
+            try
+            {
+                var userName = User.Identity.Name;
+                var identityUser = await _userManager.FindByNameAsync(userName);
+                if (request.FirstName != null)
+                {
+                    identityUser.FirstName = request.FirstName;
+                }
+                if (request.LastName != null)
+                {
+                    identityUser.LastName = request.LastName;
+                }
+                if (request.ProfilePhoto != null)
+                {
+                    identityUser.ProfilePhoto = request.ProfilePhoto;
+                }
+                if (request.RegisteredOfficeId != 0)
+                {
+                    identityUser.RegisteredOffice = await _officeRepository.FindById(request.RegisteredOfficeId);
+                }
+
+                await _employeeRepository.Update(identityUser);
+
+
+                return await GetMe();
+            }
+            catch (ArgumentException e)
+            {
+                return Conflict(e.Message);
+            }
+            catch (InvalidOperationException)
+            {
+                return NotFound();
+            }
         }
 
         [Authorize]

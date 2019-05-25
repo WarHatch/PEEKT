@@ -2,16 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TravelAgent.Data.Entities;
 
-namespace TravelAgent.DataContract.Responses
+namespace TravelAgent.DataContract.Requests
 {
-    public class UserResponse
+    public class UpdateMeRequest
     {
-        public string Email { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string ProfilePhoto { get; set; }
-        public Office RegisteredOffice { get; set; }
+        public int RegisteredOfficeId { get; set; }
     }
 }
