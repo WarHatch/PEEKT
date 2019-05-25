@@ -54,6 +54,17 @@ namespace TravelAgent.Data.Repositories
                 throw new ArgumentException("There isn't any travels with this id");
             }
         }
+        public async Task<Travel> FindByIdWithOrganizedBy(int id)
+        {
+            try
+            {
+                return await appDbContext.Travels.Include(x => x.TravelTo).Include(x => x.TravelFrom).Include(x => x.Hotels).Include(x => x.Transports).SingleAsync(x => x.Id == id);
+            }
+            catch (InvalidOperationException)
+            {
+                throw new ArgumentException("There isn't any travels with this id");
+            }
+        }
 
         public async Task Update(Travel entity)
         {
