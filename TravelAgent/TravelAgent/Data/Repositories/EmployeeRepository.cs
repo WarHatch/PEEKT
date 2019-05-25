@@ -19,7 +19,7 @@ namespace TravelAgent.Data.Repositories
 
         public async Task<IEnumerable<Employee>> GetAll()
         {
-            return await appDbContext.Employees.ToArrayAsync();
+            return await appDbContext.Employees.Include(x => x.RegisteredOffice).ToArrayAsync();
         }
 
         public async Task<Employee> Create(Employee entity)
@@ -55,7 +55,7 @@ namespace TravelAgent.Data.Repositories
         {
             try
             {
-                return await appDbContext.Employees.Select(item => new Employee
+                return await appDbContext.Employees.Include(x => x.RegisteredOffice).Select(item => new Employee
                 {
                     Id = item.Id,
                     UserName = item.UserName,
