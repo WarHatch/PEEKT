@@ -66,6 +66,58 @@ namespace TravelAgent.Data
                 },
             });
 
+            modelBuilder.Entity<Employee>().HasData(new Employee[] {
+                new Employee{
+                    Id = 1,
+                    UserName = "paulius.grigaliunas.pg@gmail.com",
+                    Email = "paulius.grigaliunas.pg@gmail.com",
+                    FirstName = "Paulius",
+                    LastName = "Grigaliūnas",
+                    ProfilePhoto = "https://www.w3schools.com/howto/img_avatar.png",
+                    RegisteredOfficeId = 1,
+                    Available = true
+                },
+                new Employee{
+                    Id = 2,
+                    UserName = "emilija.lamanauskaite@gmail.com",
+                    Email = "emilija.lamanauskaite@gmail.com",
+                    FirstName = "Emilija",
+                    LastName = "Lamanauskaite",
+                    ProfilePhoto = "https://www.w3schools.com/howto/img_avatar2.png",
+                    RegisteredOfficeId = 1,
+                    Available = false
+                },
+                new Employee{
+                    Id = 3,
+                    UserName = "elena.reivytyte@gmail.com",
+                    Email = "elena.reivytyte@gmail.com",
+                    FirstName = "Elena",
+                    LastName = "Reivytytė",
+                    ProfilePhoto = "https://www.w3schools.com/howto/img_avatar2.png",
+                    RegisteredOfficeId = 1,
+                    Available = true
+                },
+                new Employee{
+                    Id = 4,
+                    UserName = "karolis.staskevicius@gmail.com",
+                    Email = "karolis.staskevicius@gmail.com",
+                    FirstName = "Karolis",
+                    LastName = "Staskevičius",
+                    ProfilePhoto = "https://www.w3schools.com/howto/img_avatar.png",
+                    RegisteredOfficeId = 2,
+                    Available = true
+                },
+                new Employee{
+                    Id = 5,
+                    UserName = "tomas.kazlauskas@gmail.com",
+                    Email = "tomas.kazlauskas@gmail.com",
+                    FirstName = "Tomas",
+                    LastName = "Kazlauskas",
+                    ProfilePhoto = "https://www.w3schools.com/howto/img_avatar.png",
+                    RegisteredOfficeId = 3,
+                    Available = true
+                },
+            });
 
 
             base.OnModelCreating(modelBuilder);

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TravelAgent.Data;
 
 namespace TravelAgent.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190525185545_insertEmployeesData")]
+    partial class insertEmployeesData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -225,7 +227,7 @@ namespace TravelAgent.Migrations
                             Id = 1,
                             AccessFailedCount = 0,
                             Available = true,
-                            ConcurrencyStamp = "1c14ef9e-964c-4721-a3da-7a6e59032c20",
+                            ConcurrencyStamp = "b75058a6-2dcf-4fd4-9a27-c4b4cc77271c",
                             Email = "paulius.grigaliunas.pg@gmail.com",
                             EmailConfirmed = false,
                             FirstName = "Paulius",
@@ -234,15 +236,14 @@ namespace TravelAgent.Migrations
                             PhoneNumberConfirmed = false,
                             ProfilePhoto = "https://www.w3schools.com/howto/img_avatar.png",
                             RegisteredOfficeId = 1,
-                            TwoFactorEnabled = false,
-                            UserName = "paulius.grigaliunas.pg@gmail.com"
+                            TwoFactorEnabled = false
                         },
                         new
                         {
                             Id = 2,
                             AccessFailedCount = 0,
                             Available = false,
-                            ConcurrencyStamp = "c99c5b44-dbb5-4c24-8b5c-176985f1bc9d",
+                            ConcurrencyStamp = "da7edba5-7151-422b-9494-73ef03d6f495",
                             Email = "emilija.lamanauskaite@gmail.com",
                             EmailConfirmed = false,
                             FirstName = "Emilija",
@@ -251,15 +252,14 @@ namespace TravelAgent.Migrations
                             PhoneNumberConfirmed = false,
                             ProfilePhoto = "https://www.w3schools.com/howto/img_avatar2.png",
                             RegisteredOfficeId = 1,
-                            TwoFactorEnabled = false,
-                            UserName = "emilija.lamanauskaite@gmail.com"
+                            TwoFactorEnabled = false
                         },
                         new
                         {
                             Id = 3,
                             AccessFailedCount = 0,
                             Available = true,
-                            ConcurrencyStamp = "7e360d81-71bb-45d0-8a5d-931dc1e46553",
+                            ConcurrencyStamp = "8d6bf079-f153-41ad-9921-1992f077737c",
                             Email = "elena.reivytyte@gmail.com",
                             EmailConfirmed = false,
                             FirstName = "Elena",
@@ -268,15 +268,14 @@ namespace TravelAgent.Migrations
                             PhoneNumberConfirmed = false,
                             ProfilePhoto = "https://www.w3schools.com/howto/img_avatar2.png",
                             RegisteredOfficeId = 1,
-                            TwoFactorEnabled = false,
-                            UserName = "elena.reivytyte@gmail.com"
+                            TwoFactorEnabled = false
                         },
                         new
                         {
                             Id = 4,
                             AccessFailedCount = 0,
                             Available = true,
-                            ConcurrencyStamp = "c9bfb2cb-1e03-400f-b672-4f4d09d8efbc",
+                            ConcurrencyStamp = "8cfcef72-2f87-46ca-9f12-7ac0e569710c",
                             Email = "karolis.staskevicius@gmail.com",
                             EmailConfirmed = false,
                             FirstName = "Karolis",
@@ -285,15 +284,14 @@ namespace TravelAgent.Migrations
                             PhoneNumberConfirmed = false,
                             ProfilePhoto = "https://www.w3schools.com/howto/img_avatar.png",
                             RegisteredOfficeId = 2,
-                            TwoFactorEnabled = false,
-                            UserName = "karolis.staskevicius@gmail.com"
+                            TwoFactorEnabled = false
                         },
                         new
                         {
                             Id = 5,
                             AccessFailedCount = 0,
                             Available = true,
-                            ConcurrencyStamp = "21692747-5be7-4095-b5c7-e2e36e255430",
+                            ConcurrencyStamp = "69152d97-c069-413c-8a08-ef5430f3e0c6",
                             Email = "tomas.kazlauskas@gmail.com",
                             EmailConfirmed = false,
                             FirstName = "Tomas",
@@ -302,8 +300,7 @@ namespace TravelAgent.Migrations
                             PhoneNumberConfirmed = false,
                             ProfilePhoto = "https://www.w3schools.com/howto/img_avatar.png",
                             RegisteredOfficeId = 3,
-                            TwoFactorEnabled = false,
-                            UserName = "tomas.kazlauskas@gmail.com"
+                            TwoFactorEnabled = false
                         });
                 });
 
