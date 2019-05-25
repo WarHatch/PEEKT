@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TravelAgent.Data.Entities;
 using TravelAgent.Data.Repositories.Interfaces;
+using TravelAgent.DataContract.Responses;
 
 namespace TravelAgent.Controllers
 {
@@ -22,13 +23,27 @@ namespace TravelAgent.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Employee>>> GetAll()
         {
-            return Ok(await  _employeeRepository.GetAll());
+
+            return Ok(await _employeeRepository.GetAll());
         }
 
         [HttpGet ("{id}")]
         public async Task<ActionResult<Employee>> GetById(int id)
         {
-            return Ok(await _employeeRepository.FindById(id));
+            Employee employee = await _employeeRepository.FindById(id);
+
+            var user = new EmployeeResponse
+            {
+                Id = employee.Id,
+                Email = employee.Email,
+                FirstName = employee.FirstName,
+                LastName = employee.LastName,
+                ProfilePhoto = employee.ProfilePhoto,
+                RegisteredOffice = employee.RegisteredOffice,
+                Available = employee.Available
+            };
+
+            return Ok(user);
         }
     }
 }
