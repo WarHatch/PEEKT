@@ -91,6 +91,10 @@ namespace TravelAgent.Controllers
             {
                 return NotFound();
             }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                return Conflict(ex);
+            }
         }
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteApartment(int id)
