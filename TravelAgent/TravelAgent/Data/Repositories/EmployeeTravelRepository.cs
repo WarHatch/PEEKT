@@ -62,7 +62,7 @@ namespace TravelAgent.Data.Repositories
 
         public async Task<IEnumerable<EmployeeTravel>> GetAll()
         {
-            return await appDbContext.EmployeeTravel.ToArrayAsync();
+            return await appDbContext.EmployeeTravel.Include(x => x.Employee).Include(x => x.Travel).ToArrayAsync();
         }
 
         public async Task Update(EmployeeTravel entity)
