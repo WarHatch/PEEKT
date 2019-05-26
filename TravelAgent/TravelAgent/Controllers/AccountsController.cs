@@ -14,7 +14,7 @@ using TravelAgent.DataContract.Responses;
 namespace TravelAgent.ClientApp
 {
     [ApiController]
-    [EnableCors("authPolicy")]
+    [EnableCors("AllowOrigin")]
     [Route("api/[controller]")]
     public class AccountsController : ControllerBase
     {

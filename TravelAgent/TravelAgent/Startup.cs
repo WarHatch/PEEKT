@@ -30,6 +30,12 @@ namespace TravelAgent
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowOrigin",
+                    builder => builder.WithOrigins("http://localhost:8080"));
+            });
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddSwaggerGen(c =>
@@ -155,7 +161,10 @@ namespace TravelAgent
             app.UseSpaStaticFiles();
 
             app.UseAuthentication();
-            app.UseCors("authPolicy");
+
+            app.UseCors(builder => builder.WithOrigins("http://localhost:8080"));
+
+            // app.UseCors("authPolicy");
 
             app.UseSwagger();
 
