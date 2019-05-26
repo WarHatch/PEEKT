@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Cors;
 using TravelAgent.Data.Entities;
 using TravelAgent.Data.Repositories.Interfaces;
 using TravelAgent.DataContract.Requests;
@@ -11,6 +12,7 @@ using TravelAgent.DataContract.Requests;
 namespace TravelAgent.Controllers
 {
     [ApiController]
+    [EnableCors("AllowOrigin")]
     [Route("api/[controller]")]
     public class OfficesController : ControllerBase
     {
