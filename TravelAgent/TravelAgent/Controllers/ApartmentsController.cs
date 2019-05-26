@@ -79,6 +79,10 @@ namespace TravelAgent.Controllers
                 {
                     apartment.FitsPeople = request.FitsPeople;
                 }
+                if (request.Version == null)
+                {
+                    apartment.Version = request.Version;
+                }
 
                 await _apartmentRepository.Update(apartment);
                 return Ok(await _apartmentRepository.FindById(id));
@@ -90,6 +94,10 @@ namespace TravelAgent.Controllers
             catch (InvalidOperationException)
             {
                 return NotFound();
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                return Conflict(ex);
             }
         }
         [HttpDelete("{id}")]

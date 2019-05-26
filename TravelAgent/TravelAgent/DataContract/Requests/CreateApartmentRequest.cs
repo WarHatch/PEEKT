@@ -11,5 +11,6 @@ namespace TravelAgent.DataContract.Requests
         public string Address { get; set; }
         public int FitsPeople { get; set; }
         public List<int> EmployeeTravelsId { get; set; }
+        public byte[] Version { get; set; }
     }
 }
