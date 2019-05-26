@@ -31,7 +31,7 @@ namespace TravelAgent.Data
                 new Apartment{Id=4, Title="Devbridge Toronto Apartament", Address="36 Toronto Street Suite 260 Toronto, Ontarion M5C 2C5", FitsPeople=6},
                 new Apartment{Id=5, Title="Devbridge London Apartament", Address="8 Devonshire Square London EC2M 4PL", FitsPeople=6},
             });*/
-            modelBuilder.Entity<Office>().HasData(new Office[] {
+            modelBuilder.Entity<Office>().OwnsOne(x => x.OfficeApartment).HasData(new Office[] {
                 new Office{
                     Id =1,
                     OfficeApartment = new Apartment {
