@@ -108,11 +108,29 @@ namespace TravelAgent.Controllers
                 }
                 if (request.Hotels != null)
                 {
+                    foreach (var hotel in request.Hotels)
+                    {
+                        await _hotelRepository.Create(hotel);
+                    }
+                    var hotels = travel.Hotels;
                     travel.Hotels = request.Hotels;
+                    foreach(var hotel in hotels)
+                    {
+                       await _hotelRepository.Delete(hotel);
+                    }
                 }
                 if (request.Transports != null)
                 {
+                    foreach (var transport in request.Transports)
+                    {
+                        await _transportRepository.Create(transport);
+                    }
+                    var transports = travel.Transports;
                     travel.Transports = request.Transports;
+                    foreach (var transport in travel.Transports)
+                    {
+                        await _transportRepository.Delete(transport);
+                    }
                 }
 
                 await _travelRepository.Update(travel);
