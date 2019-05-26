@@ -23,74 +23,75 @@ namespace TravelAgent.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            /*modelBuilder.Entity<Office>()
+                .OwnsOne(x => x.OfficeApartment)
+                .HasOne(ap => ap.Office);*/
+
+            var apartments = new Apartment[] {
+
+                new Apartment{Id=1, Title="Devbridge Vilnius Apartament", Address="Žalgirio g. 135, Vilnius 08217", FitsPeople=6},
+                new Apartment{Id=2, Title="Devbridge Kaunas Apartament", Address="A. Juozapavičiaus pr. 11 D, Kaunas 45252", FitsPeople=6},
+                new Apartment{Id=3, Title="Devbridge Chicago Apartament", Address="343 W. Erie St. Suite 600 Chicago, IL 60654", FitsPeople=6},
+                new Apartment{Id=4, Title="Devbridge Toronto Apartament", Address="36 Toronto Street Suite 260 Toronto, Ontarion M5C 2C5", FitsPeople=6},
+                new Apartment{Id=5, Title="Devbridge London Apartament", Address="8 Devonshire Square London EC2M 4PL", FitsPeople=6}
+            };
+
             /*
             modelBuilder.Entity<Apartment>().HasData(new Apartment[] {
+
                 new Apartment{Id=1, Title="Devbridge Vilnius Apartament", Address="Žalgirio g. 135, Vilnius 08217", FitsPeople=6},
                 new Apartment{Id=2, Title="Devbridge Kaunas Apartament", Address="A. Juozapavičiaus pr. 11 D, Kaunas 45252", FitsPeople=6},
                 new Apartment{Id=3, Title="Devbridge Chicago Apartament", Address="343 W. Erie St. Suite 600 Chicago, IL 60654", FitsPeople=6},
                 new Apartment{Id=4, Title="Devbridge Toronto Apartament", Address="36 Toronto Street Suite 260 Toronto, Ontarion M5C 2C5", FitsPeople=6},
                 new Apartment{Id=5, Title="Devbridge London Apartament", Address="8 Devonshire Square London EC2M 4PL", FitsPeople=6},
+
             });*/
-            modelBuilder.Entity<Office>().OwnsOne(x => x.OfficeApartment).HasData(new Office[] {
+            /*modelBuilder.Entity<Office>()
+                .OwnsOne(x => x.OfficeApartment)
+                .HasForeignKey<Office>("OfficeApartmentId");*/
+            modelBuilder.Entity<Office>().OwnsOne(x => x.OfficeApartment, a=>
+            {
+                a.HasForeignKey("OfficeApartmentId");
+                a.Property<int>("Id");
+            }
+            ).HasData(new Office[] {
                 new Office{
-                    Id =1,
-                    OfficeApartment = new Apartment {
-                        Id = 1,
-                        Title = "Devbridge Vilnius Apartament",
-                        Address = "Žalgirio g. 135, Vilnius 08217",
-                        FitsPeople = 6
-                    },
+                    Id = 1,
+                    OfficeApartment = apartments[0],
                     Title = "Devbridge Vilnius",
                     Address = "Žalgirio g. 135, Vilnius 08217"
                 },
                 new Office{
                     Id = 2,
-                    OfficeApartment = new Apartment{
-                        Id = 2,
-                        Title = "Devbridge Kaunas Apartament",
-                        Address = "A. Juozapavičiaus pr. 11 D, Kaunas 45252",
-                        FitsPeople = 6
-                    },
+                    OfficeApartment = apartments[1],
                     Title = "Devbridge Kaunas",
                     Address = "A. Juozapavičiaus pr. 11 D, Kaunas 45252"
                 },
                 new Office{
                     Id = 3,
-                    OfficeApartment = new Apartment{
-                        Id = 3,
-                        Title = "Devbridge Chicago Apartament",
-                        Address = "343 W. Erie St. Suite 600 Chicago, IL 60654",
-                        FitsPeople = 6
-                    },
+                    OfficeApartment = apartments[2],
                     Title = "Devbridge Chicago",
                     Address = "343 W. Erie St. Suite 600 Chicago, IL 60654"
                 },
                 new Office{
                     Id = 4,
-                    OfficeApartment = new Apartment{
-                        Id = 4,
-                        Title = "Devbridge Toronto Apartament",
-                        Address = "36 Toronto Street Suite 260 Toronto, Ontarion M5C 2C5", FitsPeople = 6
-                    },
+                    OfficeApartment =  apartments[3],
                     Title = "Devbridge Toronto",
                     Address = "36 Toronto Street Suite 260 Toronto, Ontarion M5C 2C5"
                 },
                 new Office{
                     Id = 5,
-                    OfficeApartment = new Apartment{
-                        Id = 5,
-                        Title = "Devbridge London Apartament",
-                        Address = "8 Devonshire Square London EC2M 4PL",
-                        FitsPeople = 6
-                    },
+                    OfficeApartment = apartments[4],
                     Title = "Devbridge London",
                     Address = "8 Devonshire Square London EC2M 4PL"
                 },
             });
-
-
-
             base.OnModelCreating(modelBuilder);
+        }
+
+        private static List<Apartment> GetApartments()
+        {
+            return new List<Apartment>();
         }
     }
 }
