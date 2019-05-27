@@ -33,7 +33,7 @@ namespace TravelAgent
             services.AddCors(options =>
             {
                 options.AddPolicy("AllowOrigin",
-                    builder => builder.WithOrigins("http://localhost:8080"));
+                    builder => builder.WithOrigins("http://localhost:8080").AllowAnyHeader().AllowAnyMethod());
             });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
@@ -162,7 +162,8 @@ namespace TravelAgent
 
             app.UseAuthentication();
 
-            app.UseCors(builder => builder.WithOrigins("http://localhost:8080"));
+            //app.UseCors(builder => builder.WithOrigins("http://localhost:8080"));
+            app.UseCors("AllowOrigin");
 
             // app.UseCors("authPolicy");
 
