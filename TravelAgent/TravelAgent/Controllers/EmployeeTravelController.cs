@@ -9,6 +9,7 @@ using TravelAgent.Data.Repositories.Interfaces;
 using TravelAgent.DataContract.Requests;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
+using TravelAgent.DataContract.Responses;
 
 namespace TravelAgent.Controllers
 {
@@ -78,12 +79,17 @@ namespace TravelAgent.Controllers
                 if (request.NeedApartment)
                 {
                     var _employeeTravel = await _employeeTravelRepository.Create(employeeTravel);
-                    var _travel =  await _travelRepository.FindById(_employeeTravel.Travel.Id);
-                    var _office = await _officeRepository.FindById(_travel.TravelTo.Id);
+                    var _office = await _officeRepository.FindById(_employeeTravel.Travel.TravelTo.Id);
                     await _apartmentRepository.AddGuest(await _apartmentRepository.FindById(_office.OfficeApartment.Id),
                         _employeeTravel);
-                        
-                    return Ok(_employeeTravel);
+
+                    var employeeTravelResponse = new EmployeeTravelResponse
+                    {
+                        Id = _employeeTravel.Id,
+                        Employee = _employeeTravel.Employee
+                    };
+
+                    return Ok();
                 }
                 else return Ok(await _employeeTravelRepository.Create(employeeTravel));
             }
@@ -98,8 +104,7 @@ namespace TravelAgent.Controllers
             try
             {
                 var _employeeTravel = await _employeeTravelRepository.FindById(id);
-                var _travel = await _travelRepository.FindById(_employeeTravel.Travel.Id);
-                var _office = await _officeRepository.FindById(_travel.TravelTo.Id);
+                var _office = await _officeRepository.FindById(_employeeTravel.Travel.TravelTo.Id);
                 var _apartment = await _apartmentRepository.RemoveGuest(await _apartmentRepository.FindById(_office.OfficeApartment.Id), _employeeTravel);
                 
                 await _apartmentRepository.RemoveGuest(_apartment, _employeeTravel);
