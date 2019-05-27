@@ -19,13 +19,15 @@ namespace TravelAgent.Controllers
         private readonly IEmployeeRepository _employeeRepository;
         private readonly ITravelRepository _travelRepository;
         private readonly IApartmentRepository _apartmentRepository;
+        private readonly IOfficeRepository _officeRepository;
 
-        public EmployeeTravelController(IEmployeeTravelRepository employeeTravelRepository, IEmployeeRepository employeeRepository, ITravelRepository travelRepository, IApartmentRepository apartmentRepository)
+        public EmployeeTravelController(IEmployeeTravelRepository employeeTravelRepository, IEmployeeRepository employeeRepository, ITravelRepository travelRepository, IApartmentRepository apartmentRepository, IOfficeRepository officeRepository)
         {
             _employeeTravelRepository = employeeTravelRepository;
             _employeeRepository = employeeRepository;
             _travelRepository = travelRepository;
             _apartmentRepository = apartmentRepository;
+            _officeRepository = officeRepository;
         }
 
         [HttpGet]
@@ -58,10 +60,18 @@ namespace TravelAgent.Controllers
                     Employee = await _employeeRepository.FindById(request.EmployeeId),
                     Travel = await _travelRepository.FindByIdWithOrganizedBy(request.TravelId),
                     Confirm = request.Confirm,
-
                 };
-
-                return Ok(await _employeeTravelRepository.Create(employeeTravel));
+                if (request.NeedApartment)
+                {
+                    var _employeeTravel = await _employeeTravelRepository.Create(employeeTravel);
+                    var _travel =  await _travelRepository.FindById(_employeeTravel.Travel.Id);
+                    var _office = await _officeRepository.FindById(_travel.TravelTo.Id);
+                    await _apartmentRepository.AddGuest(await _apartmentRepository.FindById(_office.OfficeApartment.Id),
+                        _employeeTravel);
+                        
+                    return Ok(_employeeTravel);
+                }
+                else return Ok(await _employeeTravelRepository.Create(employeeTravel));
             }
             catch (ArgumentException e)
             {
@@ -73,7 +83,14 @@ namespace TravelAgent.Controllers
         {
             try
             {
-                await _employeeTravelRepository.Delete(await _employeeTravelRepository.FindById(id));
+                var _employeeTravel = await _employeeTravelRepository.FindById(id);
+                var _travel = await _travelRepository.FindById(_employeeTravel.Travel.Id);
+                var _office = await _officeRepository.FindById(_travel.TravelTo.Id);
+                var _apartment = await _apartmentRepository.RemoveGuest(await _apartmentRepository.FindById(_office.OfficeApartment.Id), _employeeTravel);
+                
+                await _apartmentRepository.RemoveGuest(_apartment, _employeeTravel);
+                await _employeeTravelRepository.Delete(_employeeTravel);
+
                 return Ok();
             }
             catch (ArgumentException e)

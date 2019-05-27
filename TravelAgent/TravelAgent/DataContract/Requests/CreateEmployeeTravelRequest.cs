@@ -12,5 +12,6 @@ namespace TravelAgent.DataContract.Requests
         public int EmployeeId { set; get; }
         public int TravelId { set; get; }
         public bool Confirm { set; get; }
+        public bool NeedApartment { get; set; }
     }
 }
