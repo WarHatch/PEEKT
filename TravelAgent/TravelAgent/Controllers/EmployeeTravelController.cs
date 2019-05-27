@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Cors;
 using TravelAgent.Data.Entities;
 using TravelAgent.Data.Repositories.Interfaces;
 using TravelAgent.DataContract.Requests;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TravelAgent.Controllers
 {
@@ -15,14 +17,16 @@ namespace TravelAgent.Controllers
     [Route("api/[controller]")]
     public class EmployeeTravelController : ControllerBase
     {
+        private readonly UserManager<Employee> _userManager;
         private readonly IEmployeeTravelRepository _employeeTravelRepository;
         private readonly IEmployeeRepository _employeeRepository;
         private readonly ITravelRepository _travelRepository;
         private readonly IApartmentRepository _apartmentRepository;
         private readonly IOfficeRepository _officeRepository;
 
-        public EmployeeTravelController(IEmployeeTravelRepository employeeTravelRepository, IEmployeeRepository employeeRepository, ITravelRepository travelRepository, IApartmentRepository apartmentRepository, IOfficeRepository officeRepository)
+        public EmployeeTravelController(UserManager<Employee> userManager, IEmployeeTravelRepository employeeTravelRepository, IEmployeeRepository employeeRepository, ITravelRepository travelRepository, IApartmentRepository apartmentRepository, IOfficeRepository officeRepository)
         {
+            _userManager = userManager;
             _employeeTravelRepository = employeeTravelRepository;
             _employeeRepository = employeeRepository;
             _travelRepository = travelRepository;
@@ -47,6 +51,16 @@ namespace TravelAgent.Controllers
         {
             return Ok(await _employeeTravelRepository.FindByEmployeeId(id));
         }
+
+        [HttpGet("User")]
+        [Authorize]
+        public async Task<ActionResult<Employee>> GetByUser()
+        {
+            var userName = User.Identity.Name;
+            var identityUser = await _userManager.FindByNameAsync(userName);
+            return Ok(await _employeeTravelRepository.FindByEmployeeId(identityUser.Id));
+        }
+
         [HttpPost]
         [ProducesResponseType(201)]
         [ProducesResponseType(400)]

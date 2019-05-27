@@ -49,10 +49,16 @@ namespace TravelAgent.Data.Repositories
         }
 
         public async Task<EmployeeTravel> FindById(int id)
-        {   
+        {
             try
             {
-                return await appDbContext.EmployeeTravel.Include(x => x.Employee).Include(x => x.Travel).SingleAsync(x => x.Id == id);
+                return await appDbContext.EmployeeTravel
+                    .Include(x => x.Employee)
+                    .Include(x => x.Travel)
+                    .Include(x => x.Travel.OrganizedBy)
+                    .Include(x => x.Travel.TravelTo)
+                    .Include(x => x.Travel.TravelFrom)
+                    .SingleAsync(x => x.Id == id);
             }
             catch (InvalidOperationException)
             {
@@ -62,7 +68,13 @@ namespace TravelAgent.Data.Repositories
 
         public async Task<IEnumerable<EmployeeTravel>> GetAll()
         {
-            return await appDbContext.EmployeeTravel.Include(x => x.Employee).Include(x => x.Travel).ToArrayAsync();
+            return await appDbContext.EmployeeTravel
+                .Include(x => x.Employee)
+                .Include(x => x.Travel)
+                .Include(x => x.Travel.OrganizedBy)
+                .Include(x => x.Travel.TravelTo)
+                .Include(x => x.Travel.TravelFrom)
+                .ToArrayAsync();
         }
 
         public async Task Update(EmployeeTravel entity)
