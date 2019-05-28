@@ -67,6 +67,8 @@ namespace TravelAgent.Data.Repositories
                 return await appDbContext.EmployeeTravel
                     .Include(x => x.Employee)
                     .Include(x => x.Travel)
+                    .Include(x => x.Travel.Hotels)
+                    .Include(x => x.Travel.Transports)
                     .Include(x => x.Travel.OrganizedBy)
                     .Include(x => x.Travel.TravelTo)
                     .Include(x => x.Travel.TravelFrom)
@@ -83,6 +85,8 @@ namespace TravelAgent.Data.Repositories
             return await appDbContext.EmployeeTravel
                 .Include(x => x.Employee)
                 .Include(x => x.Travel)
+                .Include(x => x.Travel.Hotels)
+                .Include(x => x.Travel.Transports)
                 .Include(x => x.Travel.OrganizedBy)
                 .Include(x => x.Travel.TravelTo)
                 .Include(x => x.Travel.TravelFrom)
