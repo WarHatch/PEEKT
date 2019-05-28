@@ -1,1 +1,9 @@
-﻿
+﻿User = paulius@gmail.com TravelAgent.ClientApp.AccountsController.Login (TravelAgent) -> OnActionExecuted 	- 5/28/2019 11:27:51 PM
+User = paulius@gmail.com Accounts -> Login -> OnResultExecuted 	- 5/28/2019 11:27:51 PM
+---------------------------------------------------------
+User = paulius@gmail.com TravelAgent.Controllers.EmployeeTravelController.GetAll (TravelAgent) -> OnActionExecuted 	- 5/28/2019 11:28:03 PM
+User = paulius@gmail.com TravelAgent.Controllers.EmployeeTravelController.GetAll (TravelAgent) -> OnActionExecuted 	- 5/28/2019 11:28:03 PM
+User = paulius@gmail.com EmployeeTravel -> GetAll -> OnResultExecuted 	- 5/28/2019 11:28:03 PM
+---------------------------------------------------------
+User = paulius@gmail.com EmployeeTravel -> GetAll -> OnResultExecuted 	- 5/28/2019 11:28:03 PM
+---------------------------------------------------------
