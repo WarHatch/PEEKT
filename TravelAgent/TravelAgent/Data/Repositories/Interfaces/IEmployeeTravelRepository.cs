@@ -10,5 +10,6 @@ namespace TravelAgent.Data.Repositories.Interfaces
     {
         Task<IEnumerable<EmployeeTravel>> FindByEmployeeId(int id);
         Task<IEnumerable<EmployeeTravel>> FindByTravelId(int id);
+        Task<bool> CheckTravelsByEmployeeId(int id, int travelId);
     }
 }
