@@ -33,6 +33,7 @@ namespace TravelAgent.ClientApp
         }
 
         [HttpPost("register")]
+        [TrackExecutionTime]
         public async Task<IActionResult> Register([FromBody] RegisterAccountRequest registerAccount)
         {
             var user = new Employee
@@ -141,6 +142,7 @@ namespace TravelAgent.ClientApp
 
         [Authorize]
         [HttpPost("logout")]
+        [TrackExecutionTime]
         public async Task<IActionResult> SignOut()
         {
             await _signInManager.SignOutAsync();

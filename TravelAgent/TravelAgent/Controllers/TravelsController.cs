@@ -10,10 +10,13 @@ using TravelAgent.Data.Repositories.Interfaces;
 using TravelAgent.DataContract.Requests;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
+using TravelAgent.Cross_cutting;
 
 namespace TravelAgent.Controllers
 {
     [ApiController]
+    [Authorize]
+    [TrackExecutionTime]
     [EnableCors("AllowOrigin")]
     [Route("api/[controller]")]
     public class TravelsController : ControllerBase
@@ -39,12 +42,16 @@ namespace TravelAgent.Controllers
         }
 
         [HttpGet]
+        [Authorize]
+        [TrackExecutionTime]
         public async Task<ActionResult<IEnumerable<Travel>>> GetAll()
         {
             return Ok(await _travelRepository.GetAll());
         }
 
         [HttpGet("{id}")]
+        [Authorize]
+        [TrackExecutionTime]
         public async Task<ActionResult<Travel>> GetById(int id)
         {
             return Ok(await _travelRepository.FindById(id));
@@ -52,6 +59,7 @@ namespace TravelAgent.Controllers
 
         [HttpPost]
         [Authorize]
+        [TrackExecutionTime]
         [ProducesResponseType(201)]
         [ProducesResponseType(400)]
         [ProducesResponseType(409)]
@@ -87,6 +95,7 @@ namespace TravelAgent.Controllers
 
         [HttpPut("JoinTravels/{id}")]
         [Authorize]
+        [TrackExecutionTime]
         [ProducesResponseType(201)]
         [ProducesResponseType(400)]
         [ProducesResponseType(409)]
@@ -118,6 +127,7 @@ namespace TravelAgent.Controllers
 
         [HttpPut("{id}")]
         [Authorize]
+        [TrackExecutionTime]
         public async Task<IActionResult> UpdateTravel(int id, [FromBody]UpdateTravelRequest request)
         {
             try
@@ -188,6 +198,7 @@ namespace TravelAgent.Controllers
         }
         [HttpDelete("{id}")]
         [Authorize]
+        [TrackExecutionTime]
         public async Task<IActionResult> DeleteTravel(int id)
         {
             try

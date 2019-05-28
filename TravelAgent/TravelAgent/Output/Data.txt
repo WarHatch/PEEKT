@@ -1,13 +1,1 @@
 ﻿
-TravelAgent.ClientApp.AccountsController.Login (TravelAgent) -> OnActionExecuting 	- 5/28/2019 10:33:15 PM
-
-Paulius TravelAgent.ClientApp.AccountsController.Login (TravelAgent) -> OnActionExecuted 	- 5/28/2019 10:33:18 PM
-Accounts -> Login -> OnResultExecuting 	- 5/28/2019 10:33:18 PM
-Accounts -> Login -> OnResultExecuted 	- 5/28/2019 10:33:18 PM
----------------------------------------------------------
-User =  TravelAgent.ClientApp.AccountsController.Login (TravelAgent) -> OnActionExecuted 	- 5/28/2019 11:05:22 PM
-User = Paulius Accounts -> Login -> OnResultExecuted 	- 5/28/2019 11:05:22 PM
----------------------------------------------------------
-User = paulius@gmail.com TravelAgent.ClientApp.AccountsController.Login (TravelAgent) -> OnActionExecuted 	- 5/28/2019 11:06:42 PM
-User = Paulius Accounts -> Login -> OnResultExecuted 	- 5/28/2019 11:06:42 PM
----------------------------------------------------------

@@ -21,7 +21,7 @@ namespace TravelAgent.Cross_cutting
 
         public override void OnResultExecuted(ResultExecutedContext filterContext)
         {
-            string message = "User = " + Environment.UserName + " " + 
+            string message = "User = " + filterContext.HttpContext.User.Identity.Name + " " + 
                 filterContext.RouteData.Values["controller"].ToString() +
                 " -> " + filterContext.RouteData.Values["action"].ToString() +
                 " -> OnResultExecuted \t- " + DateTime.Now.ToString() + "\n";
@@ -31,7 +31,7 @@ namespace TravelAgent.Cross_cutting
 
         public void OnException(ExceptionContext filterContext)
         {
-            string message = "User = " + Environment.UserName + " " + 
+            string message = "User = " + filterContext.HttpContext.User.Identity.Name + " " + 
                filterContext.RouteData.Values["controller"].ToString() + " -> " +
                filterContext.RouteData.Values["action"].ToString() + " -> " +
                filterContext.Exception.Message + " \t- " + DateTime.Now.ToString() + "\n";

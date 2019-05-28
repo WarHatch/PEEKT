@@ -8,13 +8,15 @@ using TravelAgent.Data.Repositories.Interfaces;
 using TravelAgent.DataContract.Requests;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
-
+using TravelAgent.Cross_cutting;
 
 namespace TravelAgent.Controllers
 {
     [ApiController]
     [EnableCors("AllowOrigin")]
     [Route("api/[controller]")]
+    [Authorize]
+    [TrackExecutionTime]
     public class EmployeeTravelController : ControllerBase
     {
         private readonly UserManager<Employee> _userManager;
@@ -35,18 +37,24 @@ namespace TravelAgent.Controllers
         }
 
         [HttpGet]
+        [Authorize]
+        [TrackExecutionTime]
         public async Task<ActionResult<IEnumerable<EmployeeTravel>>> GetAll()
         {
             return Ok(await _employeeTravelRepository.GetAll());
         }
 
         [HttpGet("{id}")]
+        [Authorize]
+        [TrackExecutionTime]
         public async Task<ActionResult<Employee>> GetById(int id)
         {
             return Ok(await _employeeTravelRepository.FindById(id));
         }
 
         [HttpGet("Employee/{id}")]
+        [Authorize]
+        [TrackExecutionTime]
         public async Task<ActionResult<Employee>> GetByEmployeeId(int id)
         {
             return Ok(await _employeeTravelRepository.FindByEmployeeId(id));
@@ -54,6 +62,7 @@ namespace TravelAgent.Controllers
 
         [HttpGet("User")]
         [Authorize]
+        [TrackExecutionTime]
         public async Task<ActionResult<Employee>> GetByUser()
         {
             var userName = User.Identity.Name;
@@ -65,6 +74,8 @@ namespace TravelAgent.Controllers
         [ProducesResponseType(201)]
         [ProducesResponseType(400)]
         [ProducesResponseType(409)]
+        [Authorize]
+        [TrackExecutionTime]
         public async Task<ActionResult<Travel>> CreateEmployeeTravel([FromBody]CreateEmployeeTravelRequest request)
         {
             try
@@ -94,6 +105,8 @@ namespace TravelAgent.Controllers
             }
         }
         [HttpDelete("{id}")]
+        [Authorize]
+        [TrackExecutionTime]
         public async Task<IActionResult> DeleteTask(int id)
         {
             try

@@ -8,12 +8,16 @@ using Microsoft.AspNetCore.Cors;
 using TravelAgent.Data.Entities;
 using TravelAgent.Data.Repositories.Interfaces;
 using TravelAgent.DataContract.Requests;
+using TravelAgent.Cross_cutting;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TravelAgent.Controllers
 {
     [ApiController]
     [EnableCors("AllowOrigin")]
     [Route("api/[controller]")]
+    [Authorize]
+    [TrackExecutionTime]
     public class ApartmentsController : ControllerBase
     {
         private readonly IApartmentRepository _apartmentRepository;
@@ -28,12 +32,16 @@ namespace TravelAgent.Controllers
         }
 
         [HttpGet]
+        [Authorize]
+        [TrackExecutionTime]
         public async Task<ActionResult<IEnumerable<Apartment>>> GetAll()
         {
             return Ok(await _apartmentRepository.GetAll());
         }
 
         [HttpGet("{id}")]
+        [Authorize]
+        [TrackExecutionTime]
         public async Task<ActionResult<Apartment>> GetById(int id)
         {
             return Ok(await _apartmentRepository.FindById(id));
@@ -42,6 +50,8 @@ namespace TravelAgent.Controllers
 
 
         [HttpPost]
+        [Authorize]
+        [TrackExecutionTime]
         public async Task<ActionResult<Apartment>> CreateApartment([FromBody]CreateApartmentRequest request)
         {
             try
@@ -63,6 +73,8 @@ namespace TravelAgent.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize]
+        [TrackExecutionTime]
         public async Task<ActionResult<Apartment>> UpdateApartment(int id, [FromBody]CreateApartmentRequest request)
         {
             try
@@ -103,6 +115,8 @@ namespace TravelAgent.Controllers
             }
         }
         [HttpDelete("{id}")]
+        [Authorize]
+        [TrackExecutionTime]
         public async Task<IActionResult> DeleteApartment(int id)
         {
             try
@@ -125,6 +139,8 @@ namespace TravelAgent.Controllers
         }
 
         [HttpPost("AddGuest/{id}")]
+        [Authorize]
+        [TrackExecutionTime]
         public async Task<ActionResult<Apartment>> AddGuest(int id, [FromBody]AddGuestRequest request)
         {
             try
@@ -141,6 +157,8 @@ namespace TravelAgent.Controllers
         }
 
         [HttpPost("RemoveGuest/{id}")]
+        [Authorize]
+        [TrackExecutionTime]
         public async Task<ActionResult<Apartment>> RemoveGuest(int id, [FromBody]AddGuestRequest request)
         {
             try

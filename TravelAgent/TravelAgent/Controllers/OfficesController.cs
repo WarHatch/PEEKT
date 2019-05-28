@@ -8,12 +8,16 @@ using Microsoft.AspNetCore.Cors;
 using TravelAgent.Data.Entities;
 using TravelAgent.Data.Repositories.Interfaces;
 using TravelAgent.DataContract.Requests;
+using Microsoft.AspNetCore.Authorization;
+using TravelAgent.Cross_cutting;
 
 namespace TravelAgent.Controllers
 {
     [ApiController]
     [EnableCors("AllowOrigin")]
     [Route("api/[controller]")]
+    [Authorize]
+    [TrackExecutionTime]
     public class OfficesController : ControllerBase
     {
         private readonly IOfficeRepository _officeRepository;
@@ -26,18 +30,24 @@ namespace TravelAgent.Controllers
         }
 
         [HttpGet]
+        [Authorize]
+        [TrackExecutionTime]
         public async Task<ActionResult<IEnumerable<Office>>> GetAll()
         {
             return Ok(await _officeRepository.GetAll());
         }
 
         [HttpGet("{id}")]
+        [Authorize]
+        [TrackExecutionTime]
         public async Task<ActionResult<Office>> GetById(int id)
         {
             return Ok(await _officeRepository.FindById(id));
         }
 
         [HttpPost]
+        [Authorize]
+        [TrackExecutionTime]
         public async Task<ActionResult<Office>> CreateOffice([FromBody]CreateOfficeRequest officeRequest)
         {
             try
@@ -56,6 +66,8 @@ namespace TravelAgent.Controllers
             }
         }
         [HttpPut("{id}")]
+        [Authorize]
+        [TrackExecutionTime]
         public async Task<ActionResult<Office>> UpdateTravel(int id, [FromBody]UpdateOfficeRequest request)
         {
             try
@@ -89,6 +101,8 @@ namespace TravelAgent.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
+        [TrackExecutionTime]
         public async Task<IActionResult> DeleteOffice(int id)
         {
             try
