@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TravelAgent.Cross_cutting;
 using TravelAgent.Data.Entities;
 using TravelAgent.Data.Repositories.Interfaces;
 using TravelAgent.DataContract.Requests;
@@ -63,6 +64,7 @@ namespace TravelAgent.ClientApp
         }
 
         [HttpPost("login")]
+        [TrackExecutionTime]
         public async Task<IActionResult> Login([FromBody] LoginRequest login)
         {
             var result = await _signInManager.PasswordSignInAsync(login.UserName,
@@ -79,6 +81,7 @@ namespace TravelAgent.ClientApp
 
         [HttpGet("me")]
         [Authorize]
+        [TrackExecutionTime]
         public async Task<IActionResult> GetMe()
         {
             var userName = User.Identity.Name;
