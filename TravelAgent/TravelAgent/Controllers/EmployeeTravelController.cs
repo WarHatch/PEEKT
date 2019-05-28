@@ -70,6 +70,8 @@ namespace TravelAgent.Controllers
         {
             try
             {
+                if (!await _employeeTravelRepository.CheckTravelsByEmployeeId(request.EmployeeId, request.TravelId)) return Conflict(" This employee already has this trip ");
+
                 var employeeTravel = new EmployeeTravel
                 {
                     Employee = await _employeeRepository.FindById(request.EmployeeId),
@@ -82,12 +84,6 @@ namespace TravelAgent.Controllers
                     var _office = await _officeRepository.FindById(_employeeTravel.Travel.TravelTo.Id);
                     await _apartmentRepository.AddGuest(await _apartmentRepository.FindById(_office.OfficeApartment.Id),
                         _employeeTravel);
-
-                    var employeeTravelResponse = new EmployeeTravelResponse
-                    {
-                        Id = _employeeTravel.Id,
-                        Employee = _employeeTravel.Employee
-                    };
 
                     return Ok();
                 }

@@ -17,6 +17,15 @@ namespace TravelAgent.Data.Repositories
             appDbContext = context;
         }
 
+        public async Task<bool> CheckTravelsByEmployeeId(int id, int travelId)
+        {
+            foreach(var employeeTravel in await FindByEmployeeId(id))
+            {
+                if (employeeTravel.Travel.Id == travelId) return false;
+            }
+            return true;
+        }
+
         public async Task<EmployeeTravel> Create(EmployeeTravel entity)
         {
             appDbContext.Entry(entity.Employee).State = EntityState.Unchanged;
@@ -40,7 +49,7 @@ namespace TravelAgent.Data.Repositories
         {
             try
             {
-                return await appDbContext.EmployeeTravel.Where(x => x.Employee.Id == id).ToArrayAsync(); 
+                return await appDbContext.EmployeeTravel.Include(x => x.Travel).Where(x => x.Employee.Id == id).ToArrayAsync(); 
             }
             catch (InvalidOperationException)
             {
