@@ -15,7 +15,6 @@ namespace TravelAgent.DataContract.Requests
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         public decimal Cost { get; set; }
-        public int OrganizedById { get; set; }
         public List<Hotel> Hotels { get; set; }
         public List<Transport> Transports { get; set; }
 

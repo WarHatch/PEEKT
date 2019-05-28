@@ -8,6 +8,8 @@ using TravelAgent.Data.Entities;
 using TravelAgent.Data.Repositories;
 using TravelAgent.Data.Repositories.Interfaces;
 using TravelAgent.DataContract.Requests;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace TravelAgent.Controllers
 {
@@ -16,19 +18,24 @@ namespace TravelAgent.Controllers
     [Route("api/[controller]")]
     public class TravelsController : ControllerBase
     {
+        private readonly UserManager<Employee> _userManager;
         private readonly ITravelRepository _travelRepository;
         private readonly IOfficeRepository _officeRepository;
         private readonly IEmployeeRepository _employeeRepository;
+        private readonly IEmployeeTravelRepository _employeeTravelRepository;
         private readonly IHotelRepository _hotelRepository;
         private readonly ITransportRepository _transportRepository;
 
-        public TravelsController(ITravelRepository travelRepository, IOfficeRepository officeRepository, IEmployeeRepository employeeRepository, IHotelRepository hotelRepository, ITransportRepository transportRepository)
+        public TravelsController(UserManager<Employee> userManager, ITravelRepository travelRepository, IOfficeRepository officeRepository, IEmployeeRepository employeeRepository, IEmployeeTravelRepository employeeTravelRepository, IHotelRepository hotelRepository, ITransportRepository transportRepository)
         {
+            _userManager = userManager;
             _travelRepository = travelRepository;
             _officeRepository = officeRepository;
             _employeeRepository = employeeRepository;
+            _employeeTravelRepository = employeeTravelRepository;
             _hotelRepository = hotelRepository;
             _transportRepository = transportRepository;
+            
         }
 
         [HttpGet]
@@ -44,6 +51,7 @@ namespace TravelAgent.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         [ProducesResponseType(201)]
         [ProducesResponseType(400)]
         [ProducesResponseType(409)]
@@ -51,6 +59,9 @@ namespace TravelAgent.Controllers
         {
             try
             {
+                var userName = User.Identity.Name;
+                var identityUser = await _userManager.FindByNameAsync(userName);
+
                 var travel = new Travel
                 {
                     Name = request.Name,
@@ -61,7 +72,7 @@ namespace TravelAgent.Controllers
                     Hotels = request.Hotels,
                     Transports = request.Transports,
                     Cost = request.Cost,
-                    OrganizedBy = await _employeeRepository.FindById(request.OrganizedById)
+                    OrganizedBy = identityUser
                 };
 
 
@@ -73,8 +84,41 @@ namespace TravelAgent.Controllers
             }
         }
 
+
+        [HttpPut("JoinTravels/{id}")]
+        [Authorize]
+        [ProducesResponseType(201)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(409)]
+        public async Task<ActionResult<Travel>> JoinTravels(int id, [FromBody]JoinTravelRequest request)
+        {
+            try
+            {
+                var travel = await _travelRepository.FindById(request.Id);
+                var employeeTravels = await _employeeTravelRepository.FindByEmployeeId(request.Id);
+
+                foreach (var employeeTravel in employeeTravels)
+                {
+                    employeeTravel.Travel.Id = id;
+                    await _employeeTravelRepository.Update(employeeTravel);
+                }
+
+                await _travelRepository.Delete(travel);
+                return Ok();
+            }
+            catch (ArgumentException e)
+            {
+                return Conflict(e.Message);
+            }
+            catch (InvalidOperationException)
+            {
+                return NotFound();
+            }
+        }
+
         [HttpPut("{id}")]
-        public async Task<ActionResult<Travel>> UpdateTravel(int id, [FromBody]UpdateTravelRequest request)
+        [Authorize]
+        public async Task<IActionResult> UpdateTravel(int id, [FromBody]UpdateTravelRequest request)
         {
             try
             {
@@ -103,10 +147,6 @@ namespace TravelAgent.Controllers
                 {
                     travel.Cost = request.Cost;
                 }
-                if (request.OrganizedById != 0)
-                {
-                    travel.OrganizedBy = await _employeeRepository.FindById(request.OrganizedById);
-                }
                 if (request.Hotels != null)
                 {
                     foreach (var hotel in request.Hotels)
@@ -128,7 +168,7 @@ namespace TravelAgent.Controllers
                     }
                     var transports = travel.Transports;
                     travel.Transports = request.Transports;
-                    foreach (var transport in travel.Transports)
+                    foreach (var transport in transports)
                     {
                         await _transportRepository.Delete(transport);
                     }
@@ -147,6 +187,7 @@ namespace TravelAgent.Controllers
             }
         }
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> DeleteTravel(int id)
         {
             try
