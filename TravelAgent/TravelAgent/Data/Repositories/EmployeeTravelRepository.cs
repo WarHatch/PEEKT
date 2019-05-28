@@ -18,12 +18,19 @@ namespace TravelAgent.Data.Repositories
         }
 
         public async Task<bool> CheckTravelsByEmployeeId(int id, int travelId)
-        {
-            foreach(var employeeTravel in await FindByEmployeeId(id))
-            {
-                if (employeeTravel.Travel.Id == travelId) return false;
+        {   
+            try
+            { 
+                foreach(var employeeTravel in await FindByEmployeeId(id))
+                {
+                    if (employeeTravel.Travel.Id == travelId) return false;
+                }
+                return true;
             }
-            return true;
+            catch (NullReferenceException)
+            {
+                return false;
+            }
         }
 
         public async Task<EmployeeTravel> Create(EmployeeTravel entity)
