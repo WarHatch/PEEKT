@@ -22,15 +22,17 @@ namespace TravelAgent.Controllers
         private readonly ITravelRepository _travelRepository;
         private readonly IOfficeRepository _officeRepository;
         private readonly IEmployeeRepository _employeeRepository;
+        private readonly IEmployeeTravelRepository _employeeTravelRepository;
         private readonly IHotelRepository _hotelRepository;
         private readonly ITransportRepository _transportRepository;
 
-        public TravelsController(UserManager<Employee> userManager, ITravelRepository travelRepository, IOfficeRepository officeRepository, IEmployeeRepository employeeRepository, IHotelRepository hotelRepository, ITransportRepository transportRepository)
+        public TravelsController(UserManager<Employee> userManager, ITravelRepository travelRepository, IOfficeRepository officeRepository, IEmployeeRepository employeeRepository, IEmployeeTravelRepository employeeTravelRepository, IHotelRepository hotelRepository, ITransportRepository transportRepository)
         {
             _userManager = userManager;
             _travelRepository = travelRepository;
             _officeRepository = officeRepository;
             _employeeRepository = employeeRepository;
+            _employeeTravelRepository = employeeTravelRepository;
             _hotelRepository = hotelRepository;
             _transportRepository = transportRepository;
             
@@ -82,9 +84,41 @@ namespace TravelAgent.Controllers
             }
         }
 
+
+        [HttpPut("JoinTravels/{id}")]
+        [Authorize]
+        [ProducesResponseType(201)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(409)]
+        public async Task<ActionResult<Travel>> JoinTravels(int id, [FromBody]JoinTravelRequest request)
+        {
+            try
+            {
+                var travel = await _travelRepository.FindById(request.Id);
+                var employeeTravels = await _employeeTravelRepository.FindByEmployeeId(request.Id);
+
+                foreach (var employeeTravel in employeeTravels)
+                {
+                    employeeTravel.Travel.Id = id;
+                    await _employeeTravelRepository.Update(employeeTravel);
+                }
+
+                await _travelRepository.Delete(travel);
+                return Ok();
+            }
+            catch (ArgumentException e)
+            {
+                return Conflict(e.Message);
+            }
+            catch (InvalidOperationException)
+            {
+                return NotFound();
+            }
+        }
+
         [HttpPut("{id}")]
         [Authorize]
-        public async Task<ActionResult<Travel>> UpdateTravel(int id, [FromBody]UpdateTravelRequest request)
+        public async Task<IActionResult> UpdateTravel(int id, [FromBody]UpdateTravelRequest request)
         {
             try
             {
