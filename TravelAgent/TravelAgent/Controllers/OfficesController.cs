@@ -16,7 +16,6 @@ namespace TravelAgent.Controllers
     [ApiController]
     [EnableCors("AllowOrigin")]
     [Route("api/[controller]")]
-    [Authorize]
     [TrackExecutionTime]
     public class OfficesController : ControllerBase
     {
