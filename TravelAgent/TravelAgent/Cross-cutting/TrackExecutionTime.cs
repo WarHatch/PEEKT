@@ -9,9 +9,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace TravelAgent.Cross_cutting
 {
+    [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
     public class TrackExecutionTime : ActionFilterAttribute, IExceptionFilter 
     {
-        
         public override void OnActionExecuted(ActionExecutedContext filterContext)
         {
             string message = "User = " + filterContext.HttpContext.User.Identity.Name + " " + filterContext.ActionDescriptor.DisplayName + " -> OnActionExecuted \t- " +
@@ -34,7 +34,7 @@ namespace TravelAgent.Cross_cutting
             string message = "User = " + filterContext.HttpContext.User.Identity.Name + " " + 
                filterContext.RouteData.Values["controller"].ToString() + " -> " +
                filterContext.RouteData.Values["action"].ToString() + " -> " +
-               filterContext.Exception.Message + " \t- " + DateTime.Now.ToString() + "\n";
+               filterContext.Exception.Message + " -> ExceptionMessage \t- " + DateTime.Now.ToString() + "\n";
             LogExecutionTime(message);
             LogExecutionTime("---------------------------------------------------------\n");
         }

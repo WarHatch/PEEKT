@@ -102,6 +102,7 @@ namespace TravelAgent.ClientApp
 
         [HttpPut("me")]
         [Authorize]
+        [TrackExecutionTime]
         public async Task<IActionResult> UpdateMe([FromBody]UpdateMeRequest request)
         {
             try

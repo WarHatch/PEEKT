@@ -71,11 +71,11 @@ namespace TravelAgent.Controllers
         }
 
         [HttpPost]
+        [Authorize]
+        [TrackExecutionTime]
         [ProducesResponseType(201)]
         [ProducesResponseType(400)]
         [ProducesResponseType(409)]
-        [Authorize]
-        [TrackExecutionTime]
         public async Task<ActionResult<Travel>> CreateEmployeeTravel([FromBody]CreateEmployeeTravelRequest request)
         {
             try
