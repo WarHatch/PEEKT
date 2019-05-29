@@ -141,8 +141,8 @@ namespace TravelAgent.ClientApp
             }
         }
 
-        [Authorize]
         [HttpPost("logout")]
+        [Authorize]
         [TrackExecutionTime]
         public async Task<IActionResult> SignOut()
         {

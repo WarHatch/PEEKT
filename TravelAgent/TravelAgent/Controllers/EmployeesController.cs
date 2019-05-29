@@ -15,7 +15,6 @@ namespace TravelAgent.Controllers
     [ApiController]
     [EnableCors("AllowOrigin")]
     [Route("api/[controller]")]
-    [Authorize]
     [TrackExecutionTime]
     public class EmployeesController : ControllerBase
     {
@@ -27,7 +26,6 @@ namespace TravelAgent.Controllers
         }
 
         [HttpGet]
-        [Authorize]
         [TrackExecutionTime]
         public async Task<ActionResult<IEnumerable<Employee>>> GetAll()
         {
@@ -36,7 +34,6 @@ namespace TravelAgent.Controllers
         }
 
         [HttpGet ("{id}")]
-        [Authorize]
         [TrackExecutionTime]
         public async Task<ActionResult<Employee>> GetById(int id)
         {

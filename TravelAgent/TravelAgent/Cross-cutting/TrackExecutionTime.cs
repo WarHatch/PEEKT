@@ -41,7 +41,14 @@ namespace TravelAgent.Cross_cutting
 
         private void LogExecutionTime(string message)
         {
-            File.AppendAllText("Output/Data.txt", message);
+            if (!File.Exists("Output/Data.txt"))
+            {
+                using (StreamWriter sw = File.CreateText("Output/Data.txt"))
+                {
+                    sw.WriteLine(message);
+                }
+            }
+            else File.AppendAllText("Output/Data.txt", message);
         }
     }
 }

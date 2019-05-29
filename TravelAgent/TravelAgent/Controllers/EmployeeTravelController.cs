@@ -37,7 +37,6 @@ namespace TravelAgent.Controllers
         }
 
         [HttpGet]
-        [Authorize]
         [TrackExecutionTime]
         public async Task<ActionResult<IEnumerable<EmployeeTravel>>> GetAll()
         {
@@ -45,7 +44,6 @@ namespace TravelAgent.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize]
         [TrackExecutionTime]
         public async Task<ActionResult<Employee>> GetById(int id)
         {
@@ -53,7 +51,6 @@ namespace TravelAgent.Controllers
         }
 
         [HttpGet("Employee/{id}")]
-        [Authorize]
         [TrackExecutionTime]
         public async Task<ActionResult<Employee>> GetByEmployeeId(int id)
         {
@@ -71,7 +68,6 @@ namespace TravelAgent.Controllers
         }
 
         [HttpPost]
-        [Authorize]
         [TrackExecutionTime]
         [ProducesResponseType(201)]
         [ProducesResponseType(400)]
@@ -105,7 +101,6 @@ namespace TravelAgent.Controllers
             }
         }
         [HttpDelete("{id}")]
-        [Authorize]
         [TrackExecutionTime]
         public async Task<IActionResult> DeleteTask(int id)
         {

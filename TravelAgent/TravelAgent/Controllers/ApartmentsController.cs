@@ -16,7 +16,6 @@ namespace TravelAgent.Controllers
     [ApiController]
     [EnableCors("AllowOrigin")]
     [Route("api/[controller]")]
-    [Authorize]
     [TrackExecutionTime]
     public class ApartmentsController : ControllerBase
     {
@@ -32,7 +31,6 @@ namespace TravelAgent.Controllers
         }
 
         [HttpGet]
-        [Authorize]
         [TrackExecutionTime]
         public async Task<ActionResult<IEnumerable<Apartment>>> GetAll()
         {
@@ -50,7 +48,6 @@ namespace TravelAgent.Controllers
 
 
         [HttpPost]
-        [Authorize]
         [TrackExecutionTime]
         public async Task<ActionResult<Apartment>> CreateApartment([FromBody]CreateApartmentRequest request)
         {
@@ -73,7 +70,6 @@ namespace TravelAgent.Controllers
         }
 
         [HttpPut("{id}")]
-        [Authorize]
         [TrackExecutionTime]
         public async Task<ActionResult<Apartment>> UpdateApartment(int id, [FromBody]CreateApartmentRequest request)
         {
@@ -115,7 +111,6 @@ namespace TravelAgent.Controllers
             }
         }
         [HttpDelete("{id}")]
-        [Authorize]
         [TrackExecutionTime]
         public async Task<IActionResult> DeleteApartment(int id)
         {
@@ -139,7 +134,6 @@ namespace TravelAgent.Controllers
         }
 
         [HttpPost("AddGuest/{id}")]
-        [Authorize]
         [TrackExecutionTime]
         public async Task<ActionResult<Apartment>> AddGuest(int id, [FromBody]AddGuestRequest request)
         {
@@ -157,7 +151,6 @@ namespace TravelAgent.Controllers
         }
 
         [HttpPost("RemoveGuest/{id}")]
-        [Authorize]
         [TrackExecutionTime]
         public async Task<ActionResult<Apartment>> RemoveGuest(int id, [FromBody]AddGuestRequest request)
         {

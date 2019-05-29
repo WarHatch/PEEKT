@@ -30,7 +30,6 @@ namespace TravelAgent.Controllers
         }
 
         [HttpGet]
-        [Authorize]
         [TrackExecutionTime]
         public async Task<ActionResult<IEnumerable<Office>>> GetAll()
         {
@@ -38,7 +37,6 @@ namespace TravelAgent.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize]
         [TrackExecutionTime]
         public async Task<ActionResult<Office>> GetById(int id)
         {
@@ -46,7 +44,6 @@ namespace TravelAgent.Controllers
         }
 
         [HttpPost]
-        [Authorize]
         [TrackExecutionTime]
         public async Task<ActionResult<Office>> CreateOffice([FromBody]CreateOfficeRequest officeRequest)
         {
@@ -66,7 +63,6 @@ namespace TravelAgent.Controllers
             }
         }
         [HttpPut("{id}")]
-        [Authorize]
         [TrackExecutionTime]
         public async Task<ActionResult<Office>> UpdateTravel(int id, [FromBody]UpdateOfficeRequest request)
         {
@@ -101,14 +97,12 @@ namespace TravelAgent.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize]
         [TrackExecutionTime]
         public async Task<IActionResult> DeleteOffice(int id)
         {
             try
             {
                 var office = await _officeRepository.FindById(id);
-                //await _apartmentRepository.Delete(office.OfficeApartment);
                 await _officeRepository.Delete(office);
                 return Ok();
             }
