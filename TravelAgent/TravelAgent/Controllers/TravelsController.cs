@@ -101,14 +101,20 @@ namespace TravelAgent.Controllers
                 var travel = await _travelRepository.FindById(request.Id);
                 var employeeTravels = await _employeeTravelRepository.FindByEmployeeId(request.Id);
 
-                foreach (var employeeTravel in employeeTravels)
-                {
-                    employeeTravel.Travel.Id = id;
-                    await _employeeTravelRepository.Update(employeeTravel);
-                }
+                var travelMain = await _travelRepository.FindById(id);
 
-                await _travelRepository.Delete(travel);
-                return Ok();
+                if ((travel.StartTime - travelMain.StartTime).Days <= 1)
+                {
+                    foreach (var employeeTravel in employeeTravels)
+                    {
+                        employeeTravel.Travel.Id = id;
+                        await _employeeTravelRepository.Update(employeeTravel);
+                    }
+
+                    await _travelRepository.Delete(travel);
+                    return Ok();
+                }
+                else return Conflict("Too different start dates");
             }
             catch (ArgumentException e)
             {
