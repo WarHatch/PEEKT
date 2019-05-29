@@ -7,12 +7,15 @@ using Microsoft.AspNetCore.Cors;
 using TravelAgent.Data.Entities;
 using TravelAgent.Data.Repositories.Interfaces;
 using TravelAgent.DataContract.Responses;
+using Microsoft.AspNetCore.Authorization;
+using TravelAgent.Cross_cutting;
 
 namespace TravelAgent.Controllers
 {
     [ApiController]
     [EnableCors("AllowOrigin")]
     [Route("api/[controller]")]
+    [TrackExecutionTime]
     public class EmployeesController : ControllerBase
     {
         private readonly IEmployeeRepository _employeeRepository;
@@ -23,6 +26,7 @@ namespace TravelAgent.Controllers
         }
 
         [HttpGet]
+        [TrackExecutionTime]
         public async Task<ActionResult<IEnumerable<Employee>>> GetAll()
         {
 
@@ -30,6 +34,7 @@ namespace TravelAgent.Controllers
         }
 
         [HttpGet ("{id}")]
+        [TrackExecutionTime]
         public async Task<ActionResult<Employee>> GetById(int id)
         {
             Employee employee = await _employeeRepository.FindById(id);

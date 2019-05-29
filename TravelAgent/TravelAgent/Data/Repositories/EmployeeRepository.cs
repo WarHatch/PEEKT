@@ -79,8 +79,6 @@ namespace TravelAgent.Data.Repositories
 
         public async Task Update(Employee entity)
         {
-
-
             var employee = appDbContext.Employees.Single(x => x.Id == entity.Id);
 
             employee.UserName = entity.UserName;
