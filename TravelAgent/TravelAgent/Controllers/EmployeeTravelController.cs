@@ -99,6 +99,30 @@ namespace TravelAgent.Controllers
                 return Conflict(e.Message);
             }
         }
+
+
+        [HttpPut("{id}")]
+        [TrackExecutionTime]
+        public async Task<IActionResult> UpdateEmployeeTravel(int id, [FromBody]UpdateEmployeeTravelRequest request)
+        {
+            try
+            {
+                var employeeTravel = await _employeeTravelRepository.FindById(id);
+                employeeTravel.Confirm = request.Confirm;
+                await _employeeTravelRepository.Update(employeeTravel);
+                return Ok(employeeTravel);
+
+            }
+            catch (ArgumentException e)
+            {
+                return Conflict(e.Message);
+            }
+            catch (InvalidOperationException)
+            {
+                return NotFound();
+            }
+        }
+
         [HttpDelete("{id}")]
         [TrackExecutionTime]
         public async Task<IActionResult> DeleteTask(int id)
