@@ -15,7 +15,6 @@ using TravelAgent.Cross_cutting;
 namespace TravelAgent.Controllers
 {
     [ApiController]
-    [Authorize]
     [TrackExecutionTime]
     [EnableCors("AllowOrigin")]
     [Route("api/[controller]")]
