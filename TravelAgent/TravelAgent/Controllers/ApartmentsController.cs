@@ -38,7 +38,6 @@ namespace TravelAgent.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize]
         [TrackExecutionTime]
         public async Task<ActionResult<Apartment>> GetById(int id)
         {
@@ -89,7 +88,7 @@ namespace TravelAgent.Controllers
                 {
                     apartment.FitsPeople = request.FitsPeople;
                 }
-                if (request.Version == null)
+                if (request.Version != null)
                 {
                     apartment.Version = request.Version;
                 }
