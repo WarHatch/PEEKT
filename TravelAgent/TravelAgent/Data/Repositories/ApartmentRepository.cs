@@ -69,6 +69,7 @@ namespace TravelAgent.Data.Repositories
             apartment.Title = entity.Title;
             apartment.Address = entity.Address;
             apartment.FitsPeople = entity.FitsPeople;
+            apartment.Version = entity.Version;
 
             await appDbContext.SaveChangesAsync();
 

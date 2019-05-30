@@ -89,7 +89,7 @@ namespace TravelAgent.Controllers
                 {
                     apartment.FitsPeople = request.FitsPeople;
                 }
-                if (request.Version == null)
+                if (request.Version != null)
                 {
                     apartment.Version = request.Version;
                 }
