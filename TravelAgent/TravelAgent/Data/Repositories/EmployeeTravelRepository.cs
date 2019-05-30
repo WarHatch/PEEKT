@@ -68,7 +68,7 @@ namespace TravelAgent.Data.Repositories
         {
             try
             {
-                return await appDbContext.EmployeeTravel.Include(x => x.Employee).Where(x => x.Travel.Id == id).ToArrayAsync();
+                return await appDbContext.EmployeeTravel.Include(x => x.Employee).Include(x => x.Travel).Where(x => x.Travel.Id == id).ToArrayAsync();
             }
             catch (InvalidOperationException)
             {
@@ -111,11 +111,11 @@ namespace TravelAgent.Data.Repositories
 
         public async Task Update(EmployeeTravel entity)
         {
+            var employeetravel = appDbContext.EmployeeTravel.Single(x => x.Id == entity.Id);
 
-            var traveler = appDbContext.EmployeeTravel.Single(x => x.Id == entity.Id);
-
-            traveler.Travel = entity.Travel;
-            traveler.Confirm = entity.Confirm;
+            employeetravel.Travel = entity.Travel;
+            employeetravel.Employee = entity.Employee;
+            employeetravel.Confirm = entity.Confirm;
 
             await appDbContext.SaveChangesAsync();
         }
