@@ -38,7 +38,6 @@ namespace TravelAgent.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize]
         [TrackExecutionTime]
         public async Task<ActionResult<Apartment>> GetById(int id)
         {
