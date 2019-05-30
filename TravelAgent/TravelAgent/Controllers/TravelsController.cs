@@ -63,8 +63,6 @@ namespace TravelAgent.Controllers
         {
             try
             {
-                var userName = User.Identity.Name;
-                var identityUser = await _userManager.FindByNameAsync(userName);
 
                 var travel = new Travel
                 {
@@ -76,7 +74,7 @@ namespace TravelAgent.Controllers
                     Hotels = request.Hotels,
                     Transports = request.Transports,
                     Cost = request.Cost,
-                    OrganizedBy = identityUser
+                    OrganizedBy = await _employeeRepository.FindById(request.OrganizedById)
                 };
 
 
