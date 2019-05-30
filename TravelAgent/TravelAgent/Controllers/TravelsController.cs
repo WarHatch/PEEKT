@@ -103,7 +103,7 @@ namespace TravelAgent.Controllers
 
                 var travelMain = await _travelRepository.FindById(id);
 
-                if ((travel.StartTime - travelMain.StartTime).Days <= 1)
+                if (Math.Abs((travel.StartTime - travelMain.StartTime).Days) <= 1)
                 {
                     foreach (var employeeTravel in employeeTravels)
                     {
