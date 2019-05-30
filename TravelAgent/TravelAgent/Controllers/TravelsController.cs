@@ -99,7 +99,7 @@ namespace TravelAgent.Controllers
             try
             {
                 var travel = await _travelRepository.FindById(request.Id);
-                var employeeTravels = await _employeeTravelRepository.FindByEmployeeId(request.Id);
+                var employeeTravels = await _employeeTravelRepository.FindByTravelId(request.Id);
 
                 var travelMain = await _travelRepository.FindById(id);
 
@@ -107,7 +107,7 @@ namespace TravelAgent.Controllers
                 {
                     foreach (var employeeTravel in employeeTravels)
                     {
-                        employeeTravel.Travel.Id = id;
+                        employeeTravel.Travel = travelMain;
                         await _employeeTravelRepository.Update(employeeTravel);
                     }
 
@@ -120,9 +120,9 @@ namespace TravelAgent.Controllers
             {
                 return Conflict(e.Message);
             }
-            catch (InvalidOperationException)
+            catch (InvalidOperationException e)
             {
-                return NotFound();
+                return Conflict(e.Message);
             }
         }
 
